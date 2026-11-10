@@ -1,0 +1,121 @@
+/* =========================================================
+   CADENZA Atelier — спільні стилі: лого, кнопка теми, світла тема
+   Темна тема = оригінальний дизайн (не змінюється).
+   ========================================================= */
+
+/* ---------- логотип у шапці (TextLogo_Final.png) ---------- */
+.hdr .logo{display:inline-flex;align-items:center;flex:none}
+.hdr .logo img{width:200px!important;height:auto!important;display:block}
+.hdr .logo .logo-light{display:none}
+@media (max-width:640px){.hdr .logo img{width:150px!important}}
+
+/* ---------- кнопка перемикання теми (знизу зліва) ---------- */
+.theme-toggle{
+  position:fixed;left:24px;bottom:24px;z-index:70;
+  display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 18px 0 14px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.16);
+  background:#141F17;color:#E8EDE9;
+  font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:500;line-height:1;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1),border-color .3s,background .3s,color .3s,box-shadow .3s;
+}
+.theme-toggle:hover{transform:translateY(-3px);border-color:#FAD4B0;color:#FAD4B0;box-shadow:0 10px 25px rgba(250,212,176,.18)}
+.theme-toggle:active{transform:scale(.96)}
+.theme-toggle svg{width:16px;height:16px;flex:none}
+.theme-toggle.above-dock{bottom:108px}
+@media (max-width:640px){.theme-toggle{left:14px;bottom:14px;padding:0 14px 0 12px}.theme-toggle.above-dock{bottom:100px}}
+
+/* ---------- світла тема ---------- */
+html[data-theme="light"]{
+  color-scheme:light;
+  --bg:#F4EFE7; --card:#FBF8F2; --card-deep:#EDE6DA;
+  --line:#DDD4C6; --line-2:#CDC3B2;
+  --accent:#8A4E22; --accent-h:#743F18;
+  --muted:#5B685E; --subtle:#7A857D; --text:#1B261E; --fg:#16211A;
+}
+html[data-theme="light"] body{color:#16211A}
+
+/* лого: світла версія */
+html[data-theme="light"] .hdr .logo .logo-dark{display:none}
+html[data-theme="light"] .hdr .logo .logo-light{display:block}
+
+/* кнопка теми */
+html[data-theme="light"] .theme-toggle{background:#FBF8F2;color:#16211A;border-color:#CDC3B2}
+html[data-theme="light"] .theme-toggle:hover{color:#8A4E22;border-color:#8A4E22;box-shadow:0 10px 25px rgba(138,78,34,.15)}
+
+/* межі шапки/футера (Home) */
+html[data-theme="light"] .hdr{border-bottom-color:#CDC3B2}
+html[data-theme="light"] footer{border-top-color:#CDC3B2}
+
+/* навігація */
+html[data-theme="light"] .nav a:hover{color:#16211A}
+html[data-theme="light"] .nav a.on{color:#8A4E22;border-bottom-color:#8A4E22}
+
+/* текст, що був жорстко білим */
+html[data-theme="light"] .pcard .more,
+html[data-theme="light"] .mcard li,
+html[data-theme="light"] .field input,
+html[data-theme="light"] .radio:hover,
+html[data-theme="light"] .radio[aria-checked=true],
+html[data-theme="light"] .foot h4,
+html[data-theme="light"] .foot h5,
+html[data-theme="light"] .ghost,
+html[data-theme="light"] .sub-tabs a:hover,
+html[data-theme="light"] .specs dd,
+html[data-theme="light"] .chip:hover,
+html[data-theme="light"] .sz:hover,
+html[data-theme="light"] .metrics b,
+html[data-theme="light"] .mx:hover,
+html[data-theme="light"] .step.done b,
+html[data-theme="light"] .step:hover b,
+html[data-theme="light"] .combo-input,
+html[data-theme="light"] .opt b,
+html[data-theme="light"] .tbl td.m,
+html[data-theme="light"] .lines div span:last-child,
+html[data-theme="light"] .det:hover,
+html[data-theme="light"] .dock .t1,
+html[data-theme="light"] .back{color:#16211A}
+html[data-theme="light"] .field label,
+html[data-theme="light"] .mc label.f{color:#2B382E}
+html[data-theme="light"] .pcard .more:hover,
+html[data-theme="light"] .ghost:hover{color:#8A4E22}
+
+/* напівпрозорі панелі та ховери */
+html[data-theme="light"] .sub{background:rgba(244,239,231,.92)}
+html[data-theme="light"] .dock{background:rgba(244,239,231,.96)}
+html[data-theme="light"] .combo-list{background:#FBF8F2}
+html[data-theme="light"] tbody tr:hover{background:rgba(0,0,0,.03)}
+html[data-theme="light"] .chip:hover,
+html[data-theme="light"] .sz:hover,
+html[data-theme="light"] .combo-input:hover,
+html[data-theme="light"] .opt:hover{border-color:rgba(22,33,26,.28)}
+html[data-theme="light"] .radio .dot{border-color:#B9AE9C}
+
+/* м'якші тіні для світлої теми */
+html[data-theme="light"] .card:hover,
+html[data-theme="light"] .pcard:hover,
+html[data-theme="light"] .pillar:hover,
+html[data-theme="light"] .mcard:hover{box-shadow:0 16px 40px rgba(60,45,25,.14),0 0 0 1px rgba(138,78,34,.18)}
+html[data-theme="light"] .hero-img:hover,
+html[data-theme="light"] .pcard:hover .ph,
+html[data-theme="light"] .mat:hover .ph{box-shadow:0 20px 40px rgba(60,45,25,.2)}
+
+/* карта: у світлій темі без інверсії */
+html[data-theme="light"] .map iframe{filter:none}
+
+/* плавна зміна теми */
+html.theme-anim *,html.theme-anim *::before,html.theme-anim *::after{transition:background-color .35s,color .35s,border-color .35s!important}
+
+/* світла тема: світло-сірий текст, що був підібраний під темний фон */
+html[data-theme="light"] .field>label,
+html[data-theme="light"] .finish .lbl,
+html[data-theme="light"] :not(.mcard)>.lbl,
+html[data-theme="light"] .alt p{color:#5B685E}
+html[data-theme="light"] .combo-list li,
+html[data-theme="light"] .tool,
+html[data-theme="light"] .tbl td,
+html[data-theme="light"] .lines div,
+html[data-theme="light"] .det-panel li b,
+html[data-theme="light"] .feats li{color:#2B382E}
+html[data-theme="light"] .alt h4{color:#8A4E22}
+html[data-theme="light"] .ok-note{color:#1F7A58}
