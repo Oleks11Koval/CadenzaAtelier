@@ -27,7 +27,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:400}
 /* ===== header ===== */
 .hdr{height:89px;border-bottom:1px solid #6E7370}
 .hdr .wrap{height:88px;display:flex;align-items:center;justify-content:space-between}
-.logo img{width:108px;height:auto}
+.logo .logo-icon img{height:30px;width:auto}.logo .logo-text img{width:138px;height:auto}
 .nav{display:flex;gap:40px;font-size:15px;color:var(--muted)}
 .nav a{transition:color .2s}
 .nav a:hover{color:#fff}
@@ -277,7 +277,16 @@ footer{border-top:1px solid #9FA1A0;padding:46px 0 47px}
 
 <header class="hdr">
   <div class="wrap">
-    <a class="logo" href="Home.html" aria-label="Cadenza Atelier — Головна"><img class="logo-dark" src="TextLogo_Final.png" alt="Cadenza Atelier"><img class="logo-light" src="TextLogo_Light.png" alt="" aria-hidden="true"></a>
+    <a class="logo" href="Home.html" aria-label="Cadenza Atelier — Головна">
+  <span class="logo-icon">
+    <img class="logo-dark" src="MainLogo_Final.png" alt="">
+    <img class="logo-light" src="MainLogo_Light.png" alt="" aria-hidden="true">
+  </span>
+  <span class="logo-text">
+    <img class="logo-dark" src="TextLogo_Final.png" alt="Cadenza Atelier">
+    <img class="logo-light" src="TextLogo_Light.png" alt="" aria-hidden="true">
+  </span>
+</a>
     <nav class="nav" aria-label="Основна навігація">
       <a href="Home.html" class="on" aria-current="page">Головна</a>
       <a href="pro_nas.html">Про нас</a>

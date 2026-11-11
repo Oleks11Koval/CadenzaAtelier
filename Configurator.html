@@ -25,6 +25,22 @@ input,textarea{font:inherit;color:inherit}
 .mono{font-family:var(--mono)}
 .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 
+
+/* brand mark + small icons */
+.ico{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;margin-right:8px;opacity:.9}
+.kicker .ico,.field>label .ico,.lbl .ico{width:13px;height:13px;vertical-align:-2px;color:var(--accent);opacity:.85}
+.geo-h h3 .ico,.sec-h h3 .ico{width:17px;height:17px;vertical-align:-2px;color:var(--accent);opacity:.9;margin-right:10px}
+.alt h4 .ico{color:#F2CFAE}
+.opt .oi{display:grid;place-items:center;flex:none;color:var(--muted);transition:color .2s}
+.opt .oi .ico{width:16px;height:16px;margin:0;vertical-align:0}
+.opt[aria-checked=true] .oi{color:var(--accent)}
+.opt.bad .oi{color:var(--bad)}
+.lines .ico{color:var(--muted);margin-right:9px}
+.tbl td .gl{display:inline-flex;align-items:center}
+.tbl td .gl .ico{color:var(--muted);width:13px;height:13px;vertical-align:0}
+.notice .ico{vertical-align:-3px;margin-right:9px}
+.lnk .ico{margin-right:7px;vertical-align:-2px}
+
 /* header */
 .hdr{border-bottom:1px solid var(--line);height:78px}
 .hdr .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}
@@ -367,15 +383,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 .col:nth-child(1) .card { animation-delay: 0.1s; }
 .col:nth-child(2) .card { animation-delay: 0.2s; }
 .col:nth-child(3) .card { animation-delay: 0.3s; }
+
+/* brand mark (separate from the original text logo) */
+.brand{display:flex;align-items:center;gap:12px}
+.brand .bm{height:32px;width:auto;display:block}
+.brand .bm-light{display:none}
 </style>
 <link rel="stylesheet" href="theme.css">
 <script src="theme.js"></script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-ruler-v" viewBox="0 0 24 24"><path d="M12 3v18M8.5 6.5L12 3l3.5 3.5M8.5 17.5L12 21l3.5-3.5"/></symbol><symbol id="i-leg" viewBox="0 0 24 24"><path d="M9 3v18M9 6h4M9 10h3M9 14h4M9 18h3M17 5v14M15 7l2-2 2 2M15 17l2 2 2-2"/></symbol><symbol id="i-stem" viewBox="0 0 24 24"><path d="M3 10h11v4H3zM14 12h3l4 7"/></symbol><symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"/></symbol><symbol id="i-posture" viewBox="0 0 24 24"><circle cx="15" cy="5" r="2"/><path d="M5 19l5-7 4 2 3-5M10 12l-1-3"/></symbol><symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></symbol><symbol id="i-hex" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol><symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></symbol><symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.8"/><path d="M12 3v7.2M12 13.8V21M3 12h7.2M13.8 12H21"/></symbol><symbol id="i-rim" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/></symbol><symbol id="i-frame" viewBox="0 0 24 24"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l4-8h6l2 8M10 8L12 16h-6M9 6h3"/></symbol><symbol id="i-cockpit" viewBox="0 0 24 24"><path d="M3 9c3-2 15-2 18 0M12 8v4M12 12l-4 6M12 12l4 6"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol><symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z"/></symbol><symbol id="i-reach" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol><symbol id="i-tt" viewBox="0 0 24 24"><path d="M3 12h18M3 8v8M21 8v8"/></symbol><symbol id="i-wb" viewBox="0 0 24 24"><circle cx="6" cy="15" r="3"/><circle cx="18" cy="15" r="3"/><path d="M9 15h6M6 9v3M18 9v3"/></symbol><symbol id="i-ang" viewBox="0 0 24 24"><path d="M5 20L14 4M5 20h15M9.5 20a6 6 0 00-1.2-3.6"/></symbol><symbol id="i-clr" viewBox="0 0 24 24"><path d="M4 20h16M12 4v12M8.5 12.5L12 16l3.5-3.5"/></symbol><symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></symbol><symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.1"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol></defs></svg>
 
 <header class="hdr">
   <div class="wrap">
-    <a class="logo" href="Home.html" aria-label="Cadenza Atelier — Головна"><img class="logo-dark" src="TextLogo_Final.png" alt="Cadenza Atelier"><img class="logo-light" src="TextLogo_Light.png" alt="" aria-hidden="true"></a>
+    <div class="brand"><a href="Home.html" tabindex="-1" aria-hidden="true"><img class="bm bm-dark" src="MainLogo_Final.png" alt=""><img class="bm bm-light" src="MainLogo_Light.png" alt=""></a><a class="logo" href="Home.html" aria-label="Cadenza Atelier — Головна"><img class="logo-dark" src="TextLogo_Final.png" alt="Cadenza Atelier"><img class="logo-light" src="TextLogo_Light.png" alt="" aria-hidden="true"></a></div>
     <nav class="nav" aria-label="Основна навігація">
       <a href="Home.html">Головна</a>
       <a href="pro_nas.html">Про нас</a>
@@ -393,7 +415,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <div class="hero-row">
     <p>Точність у міліметрах. Відкрита логіка кожного рішення.</p>
     <div class="hero-meta">
-      <span>Road Stradale / Demo CA-001</span>
+      <span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-frame"/></svg>Road Stradale / Demo CA-001</span>
       <button class="save" id="save" type="button">Зберегти конфігурацію →</button>
     </div>
   </div>
@@ -401,7 +423,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <div class="stepper" id="stepper" role="tablist" aria-label="Кроки конфігурації">
     <div class="bar" id="bar"></div>
   </div>
-  <div class="notice">Статична концепція. Усі серії, значення, ціни й статуси нижче — демонстраційні; це не реальні специфікації, виконана валідація або комерційна пропозиція.</div>
+  <div class="notice"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-info"/></svg>Статична концепція. Усі серії, значення, ціни й статуси нижче — демонстраційні; це не реальні специфікації, виконана валідація або комерційна пропозиція.</div>
 </section>
 
 <div class="rule"></div>
@@ -411,12 +433,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <!-- LEFT -->
   <div class="col">
     <div class="card fit" id="fit">
-      <p class="kicker">02 / Fit-профіль</p>
+      <p class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-sliders"/></svg>02 / Fit-профіль</p>
       <h2>Почнемо<br>з посадки.</h2>
       <p class="lead">Базові виміри формують орієнтир. Остаточна геометрія — після сесії з ательє.</p>
 
       <div class="field" data-f="height">
-        <label for="f-height">Зріст, мм</label>
+        <label for="f-height"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-ruler-v"/></svg>Зріст, мм</label>
         <div class="combo">
           <input class="combo-input" id="f-height" type="text" inputmode="numeric" maxlength="4" autocomplete="off" value="1780" role="combobox" aria-expanded="false" aria-controls="l-height">
           <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
@@ -426,7 +448,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
       </div>
 
       <div class="field" data-f="inseam">
-        <label for="f-inseam">Внутрішня довжина ноги, мм</label>
+        <label for="f-inseam"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-leg"/></svg>Внутрішня довжина ноги, мм</label>
         <div class="combo">
           <input class="combo-input" id="f-inseam" type="text" inputmode="numeric" maxlength="4" autocomplete="off" value="840" role="combobox" aria-expanded="false" aria-controls="l-inseam">
           <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
@@ -436,7 +458,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
       </div>
 
       <div class="field" data-f="stem">
-        <label for="f-stem">Довжина виносу, мм</label>
+        <label for="f-stem"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-stem"/></svg>Довжина виносу, мм</label>
         <div class="combo">
           <input class="combo-input" id="f-stem" type="text" inputmode="numeric" maxlength="3" autocomplete="off" value="100" role="combobox" aria-expanded="false" aria-controls="l-stem">
           <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
@@ -446,21 +468,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
       </div>
 
       <div class="field" style="margin-top:34px">
-        <span class="lbl" id="fit-lbl">Характер посадки</span>
+        <span class="lbl" id="fit-lbl"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-posture"/></svg>Характер посадки</span>
         <div class="radios" id="fitType" role="radiogroup" aria-labelledby="fit-lbl">
-          <button type="button" class="opt" role="radio" aria-checked="true" data-v="endurance"><span class="rad"></span><span><b>Endurance</b><small>Обрано · комфорт / дистанція</small></span></button>
-          <button type="button" class="opt" role="radio" aria-checked="false" data-v="performance"><span class="rad"></span><span><b>Performance</b><small>Альтернативний демопрофіль</small></span></button>
+          <button type="button" class="opt" role="radio" aria-checked="true" data-v="endurance"><span class="rad"></span><span class="oi"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pulse"/></svg></span><span><b>Endurance</b><small>Обрано · комфорт / дистанція</small></span></button>
+          <button type="button" class="opt" role="radio" aria-checked="false" data-v="performance"><span class="rad"></span><span class="oi"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg></span><span><b>Performance</b><small>Альтернативний демопрофіль</small></span></button>
         </div>
       </div>
       <p class="note">Не рекомендація bike fit. Кут, висота сідла та reach уточнюються з фахівцем.</p>
-      <button class="lnk" type="button" data-modal="Уточнення посадки">Уточнити з ательє →</button>
+      <button class="lnk" type="button" data-modal="Уточнення посадки"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>Уточнити з ательє →</button>
     </div>
   </div>
 
   <!-- CENTER -->
   <div class="col">
     <div class="card viewer" id="viewer">
-      <div class="v-head"><span>Студійний силует / демо 3D</span><button type="button" id="profBtn">Профіль · 01</button></div>
+      <div class="v-head"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-cube"/></svg>Студійний силует / демо 3D</span><button type="button" id="profBtn">Профіль · 01</button></div>
       <div class="v-stage" id="stage">
         <svg viewBox="-109 -85 718 415" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Схематичний силует шосейного велосипеда з трьома позначеними вузлами">
           <g id="wheels" fill="none"></g>
@@ -490,12 +512,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
     </div>
 
     <div class="card alt">
-      <h4>Текстова альтернатива візуалізації</h4>
+      <h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-eye"/></svg>Текстова альтернатива візуалізації</h4>
       <p id="altTxt"></p>
     </div>
 
     <div class="card geo" id="geo">
-      <div class="geo-h"><h3>Геометрія <span>/ попередня</span></h3><span class="kicker" style="letter-spacing:.14em">Демо · мм / °</span></div>
+      <div class="geo-h"><h3><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-ang"/></svg>Геометрія <span>/ попередня</span></h3><span class="kicker" style="letter-spacing:.14em">Демо · мм / °</span></div>
       <div class="geo-body">
         <div class="sch">
           <svg viewBox="0 0 262 170" aria-hidden="true">
@@ -512,7 +534,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
     </div>
 
     <div id="nodesWrap">
-      <div class="sec-h"><h3>Вузли вашої збірки</h3><span class="kicker" style="letter-spacing:.14em">Демо / 03</span></div>
+      <div class="sec-h"><h3><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-cube"/></svg>Вузли вашої збірки</h3><span class="kicker" style="letter-spacing:.14em">Демо / 03</span></div>
       <div class="nodes" id="nodes"></div>
     </div>
   </div>
@@ -520,7 +542,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <!-- RIGHT -->
   <div class="col">
     <div class="card price">
-      <p class="kicker">Відкритий кошторис / демо</p>
+      <p class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tag"/></svg>Відкритий кошторис / демо</p>
       <h2>Ціна кожного<br>рішення</h2>
       <div class="lines" id="lines"></div>
       <div class="sum">
@@ -534,7 +556,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
     </div>
 
     <div class="compat">
-      <span class="kicker">Сумісність / демо стани</span>
+      <span class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>Сумісність / демо стани</span>
       <div class="cl" id="cl"></div>
       <p class="cap">Це приклади повідомлень, а не виконана перевірка компонентів.</p>
     </div>
@@ -605,6 +627,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0');
 const NS = 'http://www.w3.org/2000/svg';
+const ic = n => `<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-${n}"/></svg>`;
 
 class StorageManager {
   static KEY = 'cadenza_config_state';
@@ -669,9 +692,9 @@ class BikeConfigurator {
     };
 
     this.NODES = [
-      { k: 'frame', title: 'Рама / матеріал' },
-      { k: 'trans', title: 'Трансмісія' },
-      { k: 'wheels', title: 'Колісна пара' }
+      { k: 'frame', title: 'Рама / матеріал', ico: 'frame' },
+      { k: 'trans', title: 'Трансмісія', ico: 'gear' },
+      { k: 'wheels', title: 'Колісна пара', ico: 'wheel' }
     ];
 
     this.FIELDS = {
@@ -781,7 +804,7 @@ class BikeConfigurator {
       ['Кут рульової', g.ha, '°'],
       ['Кліренс', g.cl, 'мм']
     ];
-    $('#gBody').innerHTML = rows.map(([l, v, u, m]) => `<tr><td class="${m ? 'm' : ''}">${l}</td><td class="v ${m ? 'b' : ''} ${this.prevG[l] !== undefined && this.prevG[l] !== v ? 'flash' : ''}">${v}</td><td class="u">${u}</td></tr>`).join('');
+    $('#gBody').innerHTML = rows.map(([l, v, u, m]) => `<tr><td class="${m ? 'm' : ''}"><span class="gl">${ic(({'Stack':'ruler-v','Reach':'reach','Верхня труба':'tt','Колісна база':'wb','Кут рульової':'ang','Кліренс':'clr'})[l])}${l}</span></td><td class="v ${m ? 'b' : ''} ${this.prevG[l] !== undefined && this.prevG[l] !== v ? 'flash' : ''}">${v}</td><td class="u">${u}</td></tr>`).join('');
     rows.forEach(r => this.prevG[r[0]] = r[1]);
     
     const hx = 182 + (g.reach - 385) * 0.35;
@@ -797,15 +820,15 @@ class BikeConfigurator {
     const T = this.OPT.trans[this.state.trans];
     const W = this.OPT.wheels[this.state.wheels];
     const items = [
-      [F.label, F.price, false, this.state.frame !== 'ti'],
-      ['Fit Engineering', 450, true],
-      ['Трансмісія', T.price, false, this.state.trans !== 'elec'],
-      ['Колісна пара', W.price, false, this.state.wheels !== 'carbon'],
-      ['Кокпіт', 650],
-      ['Фініш / деталі', 700],
-      ['Збірка', 500]
+      [F.label, F.price, false, this.state.frame !== 'ti', 'frame'],
+      ['Fit Engineering', 450, true, false, 'sliders'],
+      ['Трансмісія', T.price, false, this.state.trans !== 'elec', 'gear'],
+      ['Колісна пара', W.price, false, this.state.wheels !== 'carbon', 'wheel'],
+      ['Кокпіт', 650, false, false, 'cockpit'],
+      ['Фініш / деталі', 700, false, false, 'spark'],
+      ['Збірка', 500, false, false, 'wrench']
     ];
-    $('#lines').innerHTML = items.map(([l, v, mo, chg]) => `<div class="${mo ? 'mo' : ''} ${chg ? 'chg' : ''}"><span>${l}</span><span>€ ${fmt(v)}</span></div>`).join('');
+    $('#lines').innerHTML = items.map(([l, v, mo, chg, ico]) => `<div class="${mo ? 'mo' : ''} ${chg ? 'chg' : ''}"><span>${ic(ico)}${l}</span><span>€ ${fmt(v)}</span></div>`).join('');
     const total = items.reduce((a, i) => a + i[1], 0);
     const el = $('#total'), from = this.state.total, t0 = performance.now();
     cancelAnimationFrame(this.tweenId);
@@ -822,10 +845,11 @@ class BikeConfigurator {
 
   renderNodes() {
     const XICO = '<svg width="9" height="9" viewBox="0 0 9 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1.5 1.5l6 6M7.5 1.5l-6 6"/></svg>';
-    $('#nodes').innerHTML = this.NODES.map(n => `<div class="card node"><p class="kicker">${n.title}</p><div class="radios" role="radiogroup" aria-label="${n.title}">${
+    $('#nodes').innerHTML = this.NODES.map(n => `<div class="card node"><p class="kicker">${ic(n.ico)}${n.title}</p><div class="radios" role="radiogroup" aria-label="${n.title}">${
       Object.entries(this.OPT[n.k]).map(([id, o]) => {
         const on = this.state[n.k] === id;
-        return `<button type="button" class="opt ${o.bad ? 'bad' : ''}" role="radio" aria-checked="${on}" data-k="${n.k}" data-v="${id}"><span class="rad">${o.bad && !on ? XICO : ''}</span><span><b>${o.name}</b><small>${on ? o.sel : o.alt}</small></span></button>`;
+        const OI = { ti: 'hex', cf: 'layers', elec: 'bolt', track: 'link', carbon: 'wheel', alu: 'rim' };
+        return `<button type="button" class="opt ${o.bad ? 'bad' : ''}" role="radio" aria-checked="${on}" data-k="${n.k}" data-v="${id}"><span class="rad">${o.bad && !on ? XICO : ''}</span><span class="oi">${ic(OI[id])}</span><span><b>${o.name}</b><small>${on ? o.sel : o.alt}</small></span></button>`;
       }).join('')
     }</div></div>`).join('');
 
@@ -1198,6 +1222,27 @@ class BikeConfigurator {
 document.addEventListener('DOMContentLoaded', () => {
   window.app = new BikeConfigurator();
 });
+</script>
+<script>
+/* sizes the brand mark to the rendered height of the text logo and follows the light/dark switch */
+(function(){
+  var brand=document.querySelector('.brand'); if(!brand) return;
+  var mD=brand.querySelector('.bm-dark'), mL=brand.querySelector('.bm-light');
+  var tD=document.querySelector('.logo .logo-dark'), tL=document.querySelector('.logo .logo-light');
+  function sync(){
+    function shown(e){var c=e&&getComputedStyle(e);return !!c&&c.display!=='none'&&c.visibility!=='hidden';}
+    var light=shown(tL)&&!shown(tD);
+    mL.style.display=light?'block':'none'; mD.style.display=light?'none':'block';
+    var t=light?tL:tD, h=t&&t.getBoundingClientRect().height;
+    if(h>8){mD.style.height=mL.style.height=h+'px';}
+  }
+  [tD,tL].forEach(function(i){if(i){i.addEventListener('load',sync);}});
+  window.addEventListener('load',sync); window.addEventListener('resize',sync);
+  document.addEventListener('click',function(){setTimeout(sync,60);});
+  var o=new MutationObserver(sync);
+  o.observe(document.documentElement,{attributes:true}); o.observe(document.body,{attributes:true});
+  sync();
+})();
 </script>
 </body>
 </html>
