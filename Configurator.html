@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конфігуратор — Cadenza Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
+<style>
+/* ===== Специфічні стилі сторінки «Конфігуратор» (Configurator.html) ===== */
+body { padding-bottom: 96px; }
+.wrap { width: min(1468px, calc(100% - 48px)); }
+
+/* Іконки конфігуратора */
+.ico { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vertical-align: -2px; margin-right: 8px; opacity: 0.9; }
+.kicker .ico, .field > label .ico, .lbl .ico { width: 13px; height: 13px; vertical-align: -2px; color: var(--accent); opacity: 0.85; }
+.geo-h h3 .ico, .sec-h h3 .ico { width: 17px; height: 17px; vertical-align: -2px; color: var(--accent); opacity: 0.9; margin-right: 10px; }
+.alt h4 .ico { color: var(--accent); }
+.opt .oi { display: grid; place-items: center; flex: none; color: var(--muted); transition: color 0.2s; }
+.opt .oi .ico { width: 16px; height: 16px; margin: 0; vertical-align: 0; }
+.opt[aria-checked="true"] .oi { color: var(--accent); }
+.opt.bad .oi { color: var(--bad); }
+.lines .ico { color: var(--muted); margin-right: 9px; }
+.tbl td .gl { display: inline-flex; align-items: center; }
+.tbl td .gl .ico { color: var(--muted); width: 13px; height: 13px; vertical-align: 0; }
+.notice .ico { vertical-align: -3px; margin-right: 9px; }
+.lnk .ico { margin-right: 7px; vertical-align: -2px; }
+
+/* Верхній блок та швидкий перемикач платформ */
+.hero { padding-top: 38px; }
+.hero h1 { font-size: 48px; line-height: 1.1; font-weight: 500; letter-spacing: -0.025em; margin-top: 12px; }
+.hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-top: 14px; }
+.hero-row p { font-size: 15px; color: var(--muted); font-weight: 300; }
+.hero-meta { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.plat-switch { display: inline-flex; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+.plat-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; color: var(--muted); transition: all 0.2s; }
+.plat-btn:hover { color: var(--fg); }
+.plat-btn[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 600; }
+.save { color: var(--accent); font-size: 12px; letter-spacing: 0.1em; text-transform: none; transition: opacity 0.2s; }
+.save:hover { opacity: 0.8; }
+
+/* Stepper */
+.stepper { position: relative; margin-top: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 30px 0; border-top: 1px solid var(--line-2); }
+.stepper .bar { position: absolute; left: 0; top: -1px; height: 2px; background: var(--accent); width: 50%; transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.step { display: flex; align-items: center; gap: 11px; text-align: left; cursor: pointer; border-radius: 6px; }
+.dot { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-family: var(--mono); font-size: 10px; font-weight: 600; border: 1px solid var(--line-2); color: var(--muted); transition: all 0.25s; }
+.step.done .dot { border-color: var(--ok); color: var(--ok); }
+.step.cur .dot { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.step b { display: block; font-size: 13px; font-weight: 500; color: var(--muted); transition: color 0.25s; }
+.step i { display: block; font-style: normal; font-size: 11px; color: var(--subtle); margin-top: 2px; }
+.step.done b { color: var(--fg); }
+.step.cur b { color: var(--accent); }
+.step.cur i { color: var(--accent); opacity: 0.85; }
+.step:hover b { color: var(--fg); }
+.notice { border: 1px solid var(--line); border-radius: 6px; padding: 10px 16px; font-size: 11.5px; color: var(--muted); margin-bottom: 32px; }
+
+/* Основна 3-колонкова сітка */
+.grid { display: grid; grid-template-columns: 343px minmax(0, 1fr) 343px; gap: 32px; align-items: start; padding-top: 40px; }
+.col { display: flex; flex-direction: column; gap: 32px; min-width: 0; }
+
+/* Fit-панель */
+.fit { padding: 28px; }
+.fit h2 { font-size: 24px; line-height: 32px; font-weight: 400; margin-top: 18px; letter-spacing: -0.01em; }
+.fit .lead { font-size: 12.5px; line-height: 18px; color: var(--muted); margin-top: 14px; font-weight: 300; }
+.field { margin-top: 23px; }
+.field > label, .lbl { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.combo { position: relative; }
+.combo-input { width: 100%; height: 40px; background: var(--bg); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 40px 0 14px; font-family: var(--mono); font-size: 14px; color: var(--fg); transition: border-color 0.2s; }
+.combo-input:hover { border-color: var(--accent); }
+.combo-input:focus { outline: none; border-color: var(--accent); }
+.combo.bad .combo-input { border-color: var(--bad); }
+.combo-btn { position: absolute; right: 0; top: 0; width: 40px; height: 40px; display: grid; place-items: center; color: var(--muted); }
+.combo-btn svg { transition: transform 0.2s; }
+.combo.open .combo-btn svg { transform: rotate(180deg); }
+.combo-list { position: absolute; z-index: 20; left: 0; right: 0; top: 44px; background: var(--card); border: 1px solid var(--line-2); border-radius: 6px; max-height: 220px; overflow: auto; padding: 4px; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5); }
+.combo-list[hidden] { display: none; }
+.combo-list li { list-style: none; padding: 8px 10px; border-radius: 4px; font-family: var(--mono); font-size: 13px; color: var(--text); cursor: pointer; }
+.combo-list li:hover, .combo-list li.sel { background: rgba(250, 212, 176, 0.12); color: var(--accent); }
+.hint { font-size: 11px; font-style: italic; color: var(--subtle); margin-top: 8px; line-height: 14px; transition: color 0.2s; }
+.combo.bad + .hint { color: var(--bad); }
+
+.radios { display: flex; flex-direction: column; gap: 12px; }
+.opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 10px 14px; min-height: 56px; border: 1px solid var(--line); border-radius: 6px; background: transparent; transition: transform var(--smooth), border-color var(--smooth), background var(--smooth); }
+.opt:hover { transform: translateX(6px); border-color: var(--accent); background: rgba(250, 212, 176, 0.05); }
+.opt[aria-checked="true"] { border-color: var(--accent); background: var(--bg); }
+.rad { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line-2); flex: none; display: grid; place-items: center; transition: all 0.2s; }
+.opt[aria-checked="true"] .rad { border-color: var(--accent); background: rgba(250, 212, 176, 0.22); }
+.opt[aria-checked="true"] .rad::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.opt b { display: block; font-size: 12.5px; font-weight: 500; color: var(--fg); }
+.opt small { display: block; font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+.opt.bad { background: var(--bad-bg); border-color: rgba(229, 100, 110, 0.35); }
+.opt.bad small { color: var(--bad); }
+.opt.bad .rad { border-color: var(--bad); color: var(--bad); }
+.opt.bad[aria-checked="true"] { border-color: var(--bad); background: var(--bad-bg-active); }
+.opt.bad[aria-checked="true"] .rad { background: rgba(229, 100, 110, 0.18); }
+.opt.bad[aria-checked="true"] .rad::after { background: var(--bad); }
+.note { font-size: 11.5px; line-height: 17px; color: var(--muted); margin-top: 18px; font-weight: 300; }
+.lnk { display: inline-block; margin-top: 14px; font-size: 12px; font-weight: 500; color: var(--accent); transition: opacity 0.2s; }
+.lnk:hover { opacity: 0.8; }
+
+/* 3D / SVG Viewer */
+.viewer { overflow: hidden; }
+.v-head { display: flex; justify-content: space-between; padding: 16px 20px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.v-head button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); transition: color 0.2s; }
+.v-head button:hover { color: var(--accent); }
+.v-stage { height: 402px; background: radial-gradient(ellipse at 50% 48%, #15251c 0%, #101a14 55%, #0c130f 100%); position: relative; overflow: hidden; }
+.v-stage svg { width: 100%; height: 100%; display: block; transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.v-stage.zoom svg { transform: scale(1.35); }
+.v-foot { border-top: 1px solid var(--line); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.v-foot b { display: block; font-size: 13.5px; font-weight: 500; }
+.v-foot span { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 5px; }
+.tools { display: flex; gap: 8px; }
+.tool { width: 32px; height: 32px; border: 1px solid var(--line-2); border-radius: 4px; display: grid; place-items: center; color: var(--muted); transition: all 0.2s; }
+.tool:hover { border-color: var(--accent); color: var(--accent); }
+.tool.on { background: rgba(250, 212, 176, 0.14); border-color: var(--accent); color: var(--accent); }
+.hs { cursor: pointer; transition: transform var(--spring); }
+.hs circle.c { fill: var(--accent); transition: r 0.2s; }
+.hs text { font-family: var(--mono); font-size: 10.5px; font-weight: 600; fill: var(--bg); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.hs .ring { fill: none; stroke: var(--accent); stroke-width: 1.2; opacity: 0; transition: opacity 0.2s; }
+.hs.on .ring { opacity: 0.55; animation: pulse 1.8s infinite; }
+.hs:hover circle.c { r: 15; }
+@keyframes pulse { 0%, 100% { r: 19; } 50% { r: 23; } }
+#overlay { opacity: 0; transition: opacity 0.35s; }
+.v-stage.prof2 #overlay { opacity: 1; }
+.alt { padding: 16px 16px 18px; }
+.alt h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; font-weight: 600; text-transform: uppercase; color: var(--accent); }
+.alt p { font-family: var(--mono); font-size: 11.5px; line-height: 20px; color: var(--muted); margin-top: 7px; }
+
+/* Геометрія */
+.geo { padding: 28px; }
+.geo-h { display: flex; justify-content: space-between; align-items: baseline; }
+.geo-h h3 { font-size: 22px; font-weight: 400; letter-spacing: -0.01em; }
+.geo-h h3 span { color: var(--muted); }
+.geo-body { display: grid; grid-template-columns: 262px 1fr; gap: 24px; margin-top: 26px; }
+.sch { background: var(--card-deep); border: 1px solid var(--line); border-radius: 6px; height: 226px; position: relative; }
+.sch svg { width: 100%; height: 170px; display: block; }
+.sch p { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font-size: 9.5px; line-height: 13px; color: var(--subtle); padding: 0 10px; }
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { font-weight: 400; font-size: 12px; color: var(--muted); text-align: right; padding: 0 0 11px; }
+.tbl th:first-child { text-align: left; }
+.tbl td { height: 36px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text); text-align: right; }
+.tbl td:first-child { text-align: left; }
+.tbl td.m { font-family: var(--mono); color: var(--fg); }
+.tbl td.b { font-weight: 600; }
+.tbl td.u { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: var(--subtle); width: 62px; text-transform: uppercase; }
+.tbl td.v { width: 70px; font-family: var(--mono); }
+.flash { animation: flash 0.6s; }
+@keyframes flash { 0% { color: var(--accent); } 100% {} }
+
+/* Вузли збірки */
+.sec-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+.sec-h h3 { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.nodes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+.node { padding: 16px; }
+.node .kicker { font-size: 10.5px; letter-spacing: 0.15em; margin-bottom: 16px; }
+.node .radios { gap: 12px; }
+.node .opt { min-height: 56px; padding: 10px 12px; }
+
+/* Кошторис */
+.price { padding: 28px; }
+.price h2 { font-size: 24px; line-height: 31px; font-weight: 400; margin-top: 18px; letter-spacing: -0.01em; }
+.lines { margin-top: 26px; }
+.lines div { display: flex; justify-content: space-between; font-size: 12.5px; line-height: 27.5px; color: var(--muted); }
+.lines div span:last-child { font-family: var(--mono); color: var(--fg); }
+.lines div.mo span:first-child { font-family: var(--mono); letter-spacing: 0.04em; }
+.lines div.chg span:last-child { color: var(--accent); }
+.sum { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 24px; }
+.total { font-family: var(--serif); font-size: 44px; line-height: 1.1; font-weight: 400; margin-top: 12px; letter-spacing: -0.01em; }
+.disc { font-size: 11px; line-height: 17px; color: var(--muted); margin-top: 18px; font-weight: 300; }
+.cta { display: flex; width: 100%; height: 43px; margin-top: 26px; border-radius: 8px; background: var(--accent); color: var(--bg); font-size: 12.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; align-items: center; justify-content: center; animation: pulseAccent 3s infinite; transition: transform var(--spring), box-shadow var(--smooth), background var(--smooth); }
+.cta:hover { background: var(--accent-h); animation: none; transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(250, 212, 176, 0.25); }
+.cta:active { transform: scale(0.98); }
+.det { display: block; margin: 16px auto 0; font-size: 12px; color: var(--muted); transition: color 0.2s; }
+.det:hover { color: var(--fg); }
+.det-panel { overflow: hidden; max-height: 0; transition: max-height 0.4s ease; }
+.det-panel.open { max-height: 280px; }
+.det-panel ul { list-style: none; margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.det-panel li { font-size: 11px; line-height: 17px; color: var(--muted); padding: 3px 0; }
+.det-panel li b { font-family: var(--mono); font-weight: 500; color: var(--text); }
+
+/* Сумісність та Provenance */
+.compat .kicker { margin-bottom: 16px; display: block; }
+.cl { display: flex; flex-direction: column; gap: 11px; }
+.ci { display: flex; gap: 12px; align-items: center; min-height: 54px; padding: 10px 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; transition: border-color 0.3s, background 0.3s; }
+.ci svg { flex: none; }
+.ci b { display: block; font-size: 12.5px; font-weight: 500; }
+.ci small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.ci.active { border-color: var(--bad); background: var(--bad-bg); }
+.cap { font-size: 10.5px; line-height: 15px; color: var(--subtle); margin-top: 14px; }
+.auth { padding: 24px; transition: border-color 0.4s, box-shadow 0.4s; }
+.auth.hl { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(250, 212, 176, 0.12); }
+.auth .ic { width: 36px; height: 36px; border-radius: 50%; background: #1D2B22; display: grid; place-items: center; color: var(--muted); margin-bottom: 18px; }
+.auth h4 { font-size: 16px; font-weight: 500; letter-spacing: -0.005em; }
+.auth p { font-size: 12px; line-height: 19.5px; color: var(--muted); margin-top: 10px; font-weight: 300; }
+.finish-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.fin-chip { font-family: var(--mono); font-size: 11px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); transition: all 0.2s; }
+.fin-chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--bg); }
+
+/* Нижній фіксований док-бар (.dock) */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: rgba(14, 21, 17, 0.96); backdrop-filter: blur(8px); border-top: 1px solid var(--line-2); }
+.dock .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; min-height: 68px; padding: 10px 0; }
+.dock .t1 { font-size: 14px; color: var(--fg); }
+.dock .t1 em { font-family: var(--serif); font-style: normal; font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; }
+.dock .t2 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted); margin-top: 4px; }
+.dock-r { display: flex; align-items: center; gap: 28px; }
+.back { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--fg); transition: color 0.2s; }
+.back:hover { color: var(--accent); }
+.dock .pill { text-transform: none; font-size: 13px; letter-spacing: 0.03em; padding: 12px 22px; }
+
+footer { margin-top: 96px; }
+
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .stepper { grid-template-columns: repeat(2, 1fr); }
+  .stepper .bar { display: none; }
+  .hero h1 { font-size: 38px; }
+  .geo-body { grid-template-columns: 1fr; }
+  .dock .t2 { display: none; }
+}
+@media (max-width: 640px) {
+  .nodes { grid-template-columns: 1fr; }
+  .dock-r { gap: 14px; }
+  .back { display: none; }
+}
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-ruler-v" viewBox="0 0 24 24"><path d="M12 3v18M8.5 6.5L12 3l3.5 3.5M8.5 17.5L12 21l3.5-3.5"/></symbol><symbol id="i-leg" viewBox="0 0 24 24"><path d="M9 3v18M9 6h4M9 10h3M9 14h4M9 18h3M17 5v14M15 7l2-2 2 2M15 17l2 2 2-2"/></symbol><symbol id="i-stem" viewBox="0 0 24 24"><path d="M3 10h11v4H3zM14 12h3l4 7"/></symbol><symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"/></symbol><symbol id="i-posture" viewBox="0 0 24 24"><circle cx="15" cy="5" r="2"/><path d="M5 19l5-7 4 2 3-5M10 12l-1-3"/></symbol><symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></symbol><symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></symbol><symbol id="i-hex" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol><symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></symbol><symbol id="i-wheel" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.8"/><path d="M12 3v7.2M12 13.8V21M3 12h7.2M13.8 12H21"/></symbol><symbol id="i-rim" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/></symbol><symbol id="i-frame" viewBox="0 0 24 24"><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><path d="M6 16l4-8h6l2 8M10 8L12 16h-6M9 6h3"/></symbol><symbol id="i-cockpit" viewBox="0 0 24 24"><path d="M3 9c3-2 15-2 18 0M12 8v4M12 12l-4 6M12 12l4 6"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol><symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z"/></symbol><symbol id="i-reach" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol><symbol id="i-tt" viewBox="0 0 24 24"><path d="M3 12h18M3 8v8M21 8v8"/></symbol><symbol id="i-wb" viewBox="0 0 24 24"><circle cx="6" cy="15" r="3"/><circle cx="18" cy="15" r="3"/><path d="M9 15h6M6 9v3M18 9v3"/></symbol><symbol id="i-ang" viewBox="0 0 24 24"><path d="M5 20L14 4M5 20h15M9.5 20a6 6 0 00-1.2-3.6"/></symbol><symbol id="i-clr" viewBox="0 0 24 24"><path d="M4 20h16M12 4v12M8.5 12.5L12 16l3.5-3.5"/></symbol><symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></symbol><symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.1"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></symbol></defs></svg>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Cadenza Atelier — Головна">
+      <span class="logo-icon">
+        <img class="logo-dark" src="MainLogo_Final.png" alt="">
+        <img class="logo-light" src="MainLogo_Light.png" alt="" aria-hidden="true">
+      </span>
+      <span class="logo-text">
+        <img class="logo-dark" src="TextLogo_Final.png" alt="Cadenza Atelier">
+        <img class="logo-light" src="TextLogo_Light.png" alt="" aria-hidden="true">
+      </span>
+    </a>
+    <nav class="nav" id="mainNav" aria-label="Основна навігація">
+      <a href="index.html">Головна</a>
+      <a href="pro_nas.html">Про нас</a>
+      <a href="Platforms.html">Платформи</a>
+      <a href="Configurator.html" class="on" aria-current="page">Конфігуратор</a>
+      <a href="index.html#contact">Зворотний зв'язок</a>
+    </nav>
+    <a class="pill" href="index.html#booking">Зарезервувати сесію</a>
+  </div>
+</header>
+
+<main>
+<section class="wrap hero">
+  <p class="kicker" style="letter-spacing:.22em">Fit Engineering / Індивідуальна збірка</p>
+  <h1>Ваша геометрія. Ваш почерк.</h1>
+  <div class="hero-row">
+    <p>Точність у міліметрах. Відкрита логіка кожного рішення.</p>
+    <div class="hero-meta">
+      <div class="plat-switch" id="platSwitch" role="group" aria-label="Вибір платформи">
+        <button type="button" class="plat-btn" data-plat="road" aria-pressed="true">Road Stradale</button>
+        <button type="button" class="plat-btn" data-plat="gravel" aria-pressed="false">Gravel Sterrato</button>
+        <button type="button" class="plat-btn" data-plat="track" aria-pressed="false">Track Velodromo</button>
+      </div>
+      <span id="platBadge"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-frame"/></svg>Road Stradale / Demo CA-001</span>
+      <button class="save" id="save" type="button">Зберегти конфігурацію →</button>
+    </div>
+  </div>
+
+  <div class="stepper" id="stepper" role="tablist" aria-label="Кроки конфігурації">
+    <div class="bar" id="bar"></div>
+  </div>
+  <div class="notice"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-info"/></svg>Статична концепція. Усі серії, значення, ціни й статуси нижче — демонстраційні; це не реальні специфікації, виконана валідація або комерційна пропозиція.</div>
+</section>
+
+<div class="rule"></div>
+
+<section class="wrap grid">
+
+  <!-- LEFT -->
+  <div class="col">
+    <div class="card fit rv" id="fit">
+      <p class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-sliders"/></svg>02 / Fit-профіль</p>
+      <h2>Почнемо<br>з посадки.</h2>
+      <p class="lead">Базові виміри формують орієнтир. Остаточна геометрія — після сесії з ательє.</p>
+
+      <div class="field" data-f="height">
+        <label for="f-height"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-ruler-v"/></svg>Зріст, мм</label>
+        <div class="combo">
+          <input class="combo-input" id="f-height" type="text" inputmode="numeric" maxlength="4" autocomplete="off" value="1780" role="combobox" aria-expanded="false" aria-controls="l-height">
+          <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
+          <ul class="combo-list" id="l-height" role="listbox" hidden></ul>
+        </div>
+        <p class="hint">Демовимір без взуття</p>
+      </div>
+
+      <div class="field" data-f="inseam">
+        <label for="f-inseam"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-leg"/></svg>Внутрішня довжина ноги, мм</label>
+        <div class="combo">
+          <input class="combo-input" id="f-inseam" type="text" inputmode="numeric" maxlength="4" autocomplete="off" value="840" role="combobox" aria-expanded="false" aria-controls="l-inseam">
+          <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
+          <ul class="combo-list" id="l-inseam" role="listbox" hidden></ul>
+        </div>
+        <p class="hint">Демовимір · потрібне уточнення</p>
+      </div>
+
+      <div class="field" data-f="stem">
+        <label for="f-stem"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-stem"/></svg>Довжина виносу, мм</label>
+        <div class="combo">
+          <input class="combo-input" id="f-stem" type="text" inputmode="numeric" maxlength="3" autocomplete="off" value="100" role="combobox" aria-expanded="false" aria-controls="l-stem">
+          <button class="combo-btn" type="button" tabindex="-1" aria-label="Показати варіанти"><svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1.5l5 5 5-5"/></svg></button>
+          <ul class="combo-list" id="l-stem" role="listbox" hidden></ul>
+        </div>
+        <p class="hint">Попередній параметр</p>
+      </div>
+
+      <div class="field" style="margin-top:34px">
+        <span class="lbl" id="fit-lbl"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-posture"/></svg>Характер посадки</span>
+        <div class="radios" id="fitType" role="radiogroup" aria-labelledby="fit-lbl">
+          <button type="button" class="opt" role="radio" aria-checked="true" data-v="endurance"><span class="rad"></span><span class="oi"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-pulse"/></svg></span><span><b>Endurance</b><small>Обрано · комфорт / дистанція</small></span></button>
+          <button type="button" class="opt" role="radio" aria-checked="false" data-v="performance"><span class="rad"></span><span class="oi"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-bolt"/></svg></span><span><b>Performance</b><small>Альтернативний демопрофіль</small></span></button>
+        </div>
+      </div>
+      <p class="note">Не рекомендація bike fit. Кут, висота сідла та reach уточнюються з фахівцем.</p>
+      <button class="lnk" type="button" data-modal="Уточнення посадки"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>Уточнити з ательє →</button>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="col">
+    <div class="card viewer rv" id="viewer">
+      <div class="v-head"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-cube"/></svg>Студійний силует / демо 3D</span><button type="button" id="profBtn">Профіль · 01</button></div>
+      <div class="v-stage" id="stage">
+        <svg viewBox="-109 -85 718 415" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Схематичний силует велосипеда з трьома позначеними вузлами">
+          <g id="wheels" fill="none"></g>
+          <g id="frame" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path id="fr-main" d="M101 157L210 50M101 157L226 157M226 157L210 50M210 50L345 43M226 157L352 66M345 43L352 66M350 62L398 157M210 50L198 8M346 40L338 28M338 28C362 21 392 27 388 56M226 157L246 196"/>
+            <path id="fr-seat" d="M182 6L214 4" />
+          </g>
+          <circle cx="226" cy="157" r="19" fill="none" id="bb" stroke-width="2"/>
+          <g id="overlay" font-family="IBM Plex Mono" font-size="10" fill="#FAD4B0">
+            <path d="M345 157V43M226 157H345" stroke="#FAD4B0" stroke-width="1" stroke-dasharray="4 4" fill="none"/>
+            <text x="353" y="104" id="ov-stack">STACK 565</text>
+            <text x="262" y="173" id="ov-reach">REACH 385</text>
+          </g>
+          <g class="hs on" data-h="1" tabindex="0" role="button" aria-label="Вузол 01: рама"><circle class="ring" cx="206" cy="44" r="19"/><circle class="c" cx="206" cy="44" r="13"/><text x="206" y="44">01</text></g>
+          <g class="hs" data-h="2" tabindex="0" role="button" aria-label="Вузол 02: трансмісія"><circle class="ring" cx="256" cy="187" r="19"/><circle class="c" cx="256" cy="187" r="13"/><text x="256" y="187">02</text></g>
+          <g class="hs" data-h="3" tabindex="0" role="button" aria-label="Вузол 03: вилка та колеса"><circle class="ring" cx="428" cy="98" r="19"/><circle class="c" cx="428" cy="98" r="13"/><text x="428" y="98">03</text></g>
+        </svg>
+      </div>
+      <div class="v-foot">
+        <div><b id="capT">Титан. Без зайвого.</b><span id="capS">Матовий фініш / демо</span></div>
+        <div class="tools">
+          <button class="tool" id="tReset" type="button" aria-label="Скинути вигляд" title="Скинути вигляд"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 6h4V2M14 6h-4V2M2 10h4v4M14 10h-4v4"/></svg></button>
+          <button class="tool" id="tZoom" type="button" aria-label="Збільшити" aria-pressed="false" title="Збільшити"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14M7 5v4M5 7h4"/></svg></button>
+          <button class="tool" id="tFull" type="button" aria-label="На весь екран" title="На весь екран"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 5.5V2h3.5M10.5 2H14v3.5M14 10.5V14h-3.5M5.5 14H2v-3.5"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card alt rv">
+      <h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-eye"/></svg>Текстова альтернатива візуалізації</h4>
+      <p id="altTxt"></p>
+    </div>
+
+    <div class="card geo rv" id="geo">
+      <div class="geo-h"><h3><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-ang"/></svg>Геометрія <span>/ попередня</span></h3><span class="kicker" style="letter-spacing:.14em">Демо · мм / °</span></div>
+      <div class="geo-body">
+        <div class="sch">
+          <svg viewBox="0 0 262 170" aria-hidden="true">
+            <path id="sch-line" fill="none" stroke="#C8D3CB" stroke-width="1" stroke-linejoin="round"/>
+            <path d="M34 132H232" stroke="#6A776D" stroke-width="1" stroke-dasharray="3 4"/>
+          </svg>
+          <p>Схематичне креслення, не в масштабі. Текстова таблиця — основне джерело параметрів.</p>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Параметр</th><th>Демо</th><th>Од.</th></tr></thead>
+          <tbody id="gBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="nodesWrap" class="rv">
+      <div class="sec-h"><h3><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-cube"/></svg>Вузли вашої збірки</h3><span class="kicker" style="letter-spacing:.14em">Демо / 03</span></div>
+      <div class="nodes" id="nodes"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="col">
+    <div class="card price rv">
+      <p class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tag"/></svg>Відкритий кошторис / демо</p>
+      <h2>Ціна кожного<br>рішення</h2>
+      <div class="lines" id="lines"></div>
+      <div class="sum">
+        <p class="kicker" style="font-size:11px">Разом / демонстраційно</p>
+        <div class="total" id="total">€ 10 400</div>
+        <p class="disc">Не комерційна пропозиція. Податки й доставка не розраховані. Фінальний склад та вартість уточнюються в ательє.</p>
+      </div>
+      <button class="cta" type="button" data-modal="Обговорення збірки">Обговорити збірку</button>
+      <button class="det" type="button" id="detBtn" aria-expanded="false">Деталі кошторису →</button>
+      <div class="det-panel" id="detPanel"><ul id="detList"></ul></div>
+    </div>
+
+    <div class="compat rv">
+      <span class="kicker"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg>Сумісність / демо стани</span>
+      <div class="cl" id="cl"></div>
+      <p class="cap">Це приклади повідомлень, а не виконана перевірка компонентів.</p>
+    </div>
+
+    <div class="card auth rv" id="auth">
+      <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M12 11v3c0 2.5-.6 4.5-1.8 6.2M8 20c1.2-1.8 1.6-3.8 1.6-6v-2.2a2.4 2.4 0 014.8 0V14c0 2 .4 3.8 1.4 5.4M5 17c.7-1.6 1-3.2 1-5a6 6 0 0112 0c0 .8 0 1.6.2 2.4M4 8.5A9 9 0 0112 3a9 9 0 019 9v1.5"/></svg></div>
+      <h4>Авторство і походження</h4>
+      <p>Оберіть фініш рами для цифрового паспорта Provenance (синхронізується зі сторінкою Платформ):</p>
+      <div class="finish-row" id="finishSwitch" role="group" aria-label="Фініш рами">
+        <button type="button" class="fin-chip" data-f="raw" aria-pressed="true">Raw titanium</button>
+        <button type="button" class="fin-chip" data-f="stealth" aria-pressed="false">Stealth black</button>
+        <button type="button" class="fin-chip" data-f="forest" aria-pressed="false">Deep forest</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><h4>CADENZA Atelier</h4><p>Приватне ательє · Україна</p><p>Візити за попереднім записом</p></div>
+    <div><h4>Provenance</h4><p>Концепція цифрового паспорта: підпис майстра та історія збірки</p></div>
+    <div><h4>Юридична інформація</h4><p class="inline"><a href="index.html#contact">Конфіденційність</a> · <a href="index.html#contact">Умови</a> · <a href="index.html#contact">Гарантія</a></p></div>
+    <div><h4>Контакти</h4><p>Зв'язок через приватного консьєржа</p><a href="index.html#booking">Залиште запит у формі</a></div>
+  </div>
+</footer>
+
+<div class="dock">
+  <div class="wrap">
+    <div><div class="t1"><em id="dockPlatName">Road Stradale</em> / ваш демоекземпляр</div><div class="t2" id="dockInfo"></div></div>
+    <div class="dock-r">
+      <a class="back" id="backToPlat" href="Platforms.html#road">Назад до платформ →</a>
+      <button class="pill" type="button" id="dockBtn">До фінішу й походження</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast above-dock" id="toast" role="status" aria-live="polite"></div>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="mc">
+    <button class="mx" type="button" id="mClose" aria-label="Закрити">×</button>
+    <p class="kicker">Запит до ательє / демо</p>
+    <h3 id="mTitle">Обговорення збірки</h3>
+    <div class="sumline" id="mSum"></div>
+    <form id="mForm" novalidate>
+      <label class="f">
+        Ім’я
+        <input name="name" type="text" placeholder="Як до вас звертатися" autocomplete="name" required>
+        <span class="field-err">Будь ласка, вкажіть коректне ім'я (від 2 літер)</span>
+      </label>
+      <label class="f">
+        Email
+        <input name="email" type="email" placeholder="Ваша електронна адреса" autocomplete="email" required>
+        <span class="field-err">Введіть коректну адресу електронної пошти</span>
+      </label>
+      <label class="f">
+        Телефон
+        <input name="phone" type="tel" placeholder="+38 (0XX) XXX-XX-XX" autocomplete="tel">
+        <span class="field-err">Вкажіть телефон у форматі +380... або від 10 цифр</span>
+      </label>
+      <div class="seg" id="mSeg" role="radiogroup" aria-label="Формат зустрічі">
+        <button type="button" role="radio" aria-checked="true" data-v="Студія">Студія</button>
+        <button type="button" role="radio" aria-checked="false" data-v="Онлайн">Онлайн</button>
+      </div>
+      <label class="f">Коментар<textarea name="note" placeholder="Побажання до геометрії, матеріалів, термінів"></textarea></label>
+      <button class="cta" type="submit" style="margin-top:6px">Надіслати запит</button>
+    </form>
+  </div>
+</div>
+
+<script src="validation.js"></script>
+<script>
+/**
+ * CADENZA Atelier — Інтерактивний конфігуратор (BikeConfigurator)
+ * Інтегровано з CadenzaApp.PLATFORMS, CadenzaApp.FINISHES, CadenzaApp.Storage та URLSearchParams
+ */
+(function (window, document) {
+  'use strict';
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const App = window.CadenzaApp;
+  const fmt = n => App.formatNumber(n);
+  const NS = 'http://www.w3.org/2000/svg';
+  const ic = n => `<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-${n}"/></svg>`;
+
+  class BikeConfigurator {
+    constructor() {
+      const cached = App.Storage.getConfig();
+      const params = new URLSearchParams(window.location.search);
+      const urlPlat = params.get('platform');
+      const urlFinish = params.get('finish');
+
+      const initialPlat = (urlPlat && App.PLATFORMS[urlPlat]) ? urlPlat : (cached.platform && App.PLATFORMS[cached.platform] ? cached.platform : 'road');
+      const initialFinish = (urlFinish && App.FINISHES[urlFinish]) ? urlFinish : (cached.finish && App.FINISHES[cached.finish] ? cached.finish : 'raw');
+
+      this.state = Object.assign({
+        platform: initialPlat,
+        finish: initialFinish,
+        step: 2,
+        hs: 1,
+        prof: 1,
+        zoom: false,
+        fit: 'endurance',
+        frame: 'ti',
+        trans: initialPlat === 'track' ? 'track' : 'elec',
+        wheels: 'carbon',
+        height: 1780,
+        inseam: 840,
+        stem: 100,
+        valid: { height: true, inseam: true, stem: true },
+        total: 10400,
+        seg: 'Студія'
+      }, cached || {}, {
+        platform: initialPlat,
+        finish: initialFinish
+      });
+
+      // Якщо користувач щойно перейшов на Track з URL — ставимо сумісну трекову трансмісію
+      if (urlPlat === 'track') {
+        this.state.trans = 'track';
+      } else if (urlPlat && urlPlat !== 'track' && this.state.trans === 'track') {
+        this.state.trans = 'elec';
+      }
+
+      this.NODES = [
+        { k: 'frame', title: 'Рама / матеріал', ico: 'frame' },
+        { k: 'trans', title: 'Трансмісія', ico: 'gear' },
+        { k: 'wheels', title: 'Колісна пара', ico: 'wheel' }
+      ];
+
+      this.FIELDS = {
+        height: { min: 1500, max: 2100, presets: [1650, 1680, 1700, 1720, 1740, 1760, 1780, 1800, 1820, 1840, 1860, 1880, 1900], hint: 'Демовимір без взуття' },
+        inseam: { min: 650, max: 1000, presets: [760, 780, 800, 820, 840, 860, 880, 900], hint: 'Демовимір · потрібне уточнення' },
+        stem: { min: 60, max: 140, presets: [80, 90, 100, 110, 120, 130], hint: 'Попередній параметр' }
+      };
+
+      this.prevG = {};
+      this.init();
+    }
+
+    get platMeta() {
+      return App.PLATFORMS[this.state.platform] || App.PLATFORMS.road;
+    }
+
+    get finishMeta() {
+      return App.FINISHES[this.state.finish] || App.FINISHES.raw;
+    }
+
+    get OPT() {
+      const P = this.platMeta;
+      const F = this.finishMeta;
+      const isTrackPlat = P.id === 'track';
+      return {
+        frame: {
+          ti: {
+            name: 'Титан Gr9',
+            price: P.framePrice,
+            label: 'Титанова рама (' + P.name + ')',
+            sel: 'Обрано · фініш ' + F.name,
+            alt: 'Альтернатива · титан 3Al-2.5V',
+            txt: 'Титанова рама ' + P.name + ', фініш ' + F.name,
+            cap: ['Титан Gr9 · ' + P.name, 'Фініш: ' + F.name + ' / демо'],
+            mat: 'Ti'
+          },
+          cf: {
+            name: 'Карбон',
+            price: P.framePrice - 600,
+            label: 'Карбонова рама (' + P.name + ')',
+            sel: 'Обрано · глянцевий фініш',
+            alt: 'Інша демоплатформа',
+            txt: 'Карбонова рама ' + P.name + ', глянцева обробка',
+            cap: ['Карбон. Легкість без компромісу.', 'Глянцевий фініш / демо'],
+            mat: 'Cf'
+          }
+        },
+        trans: {
+          elec: {
+            name: 'Електронна 2 × 12',
+            price: 2700,
+            sel: isTrackPlat ? 'Обрано · несумісна з трековою рамою' : 'Обрано · дискові гальма',
+            alt: isTrackPlat ? 'Несумісна з дропаутами Track' : 'Альтернатива · демо',
+            bad: isTrackPlat,
+            txt: 'Електронна трансмісія 2 × 12',
+            cap: ['Електронна трансмісія.', '2 × 12 / дискові гальма / демо']
+          },
+          track: {
+            name: 'Трекова 1 × 1',
+            price: 1200,
+            sel: isTrackPlat ? 'Обрано · фікс / синглспід' : 'Обрано · несумісна з рамою',
+            alt: isTrackPlat ? 'Стандарт для Track Velodromo' : 'Несумісна · демостан',
+            bad: !isTrackPlat,
+            txt: 'Трекова трансмісія 1 × 1',
+            cap: ['Трекова трансмісія.', isTrackPlat ? '1 × 1 / сумісна з Track / демо' : '1 × 1 / несумісна / демо']
+          }
+        },
+        wheels: {
+          carbon: {
+            name: 'Карбон 700C',
+            price: 1600,
+            sel: 'Обрано · профіль 35 мм',
+            alt: 'Альтернатива · демо',
+            txt: 'Карбонова вилка й колеса 700C',
+            cap: ['Карбонова вилка й колеса.', '700C / профіль 35 мм / демо'],
+            tire: P.id === 'gravel' ? 45 : (P.id === 'track' ? 25 : 32),
+            clear: P.clearance
+          },
+          alu: {
+            name: 'Алюміній 700C',
+            price: 900,
+            sel: 'Обрано · обід 28 мм',
+            alt: 'Альтернатива · демо',
+            txt: 'Карбонова вилка й алюмінієві колеса 700C',
+            cap: ['Карбонова вилка, алюмінієві колеса.', '700C / обід 28 мм / демо'],
+            tire: P.id === 'gravel' ? 40 : (P.id === 'track' ? 23 : 28),
+            clear: P.clearance + 4
+          }
+        }
+      };
+    }
+
+    get STEPS() {
+      const P = this.platMeta;
+      return [
+        { t: 'Платформа', n: '01', s: { done: P.name + ' • обрано', cur: P.name + ' • активна', up: P.name + ' • обрано' }, target: 'top' },
+        { t: 'Fit Engineering', n: '02', s: { done: 'Виконано', cur: 'Поточний крок', up: 'Наступний крок' }, target: '#fit' },
+        { t: 'Вузли', n: '03', s: { done: 'Виконано', cur: 'Поточний крок', up: 'Попередній вибір' }, target: '#nodesWrap' },
+        { t: 'Фініш і походження', n: '04', s: { done: 'Виконано', cur: 'Поточний крок', up: 'Фініш: ' + this.finishMeta.name }, target: '#auth' }
+      ];
+    }
+
+    toast(m) {
+      App.toast(m);
+    }
+
+    geo() {
+      const P = this.platMeta;
+      const p = this.state.fit === 'performance';
+      const W = this.OPT.wheels[this.state.wheels];
+      const stack = Math.round(P.baseStack + (this.state.inseam - 840) * 0.55 - (p ? 22 : 0));
+      const reach = Math.round(P.baseReach + (this.state.height - 1780) * 0.28 + (p ? 8 : 0));
+      return {
+        stack,
+        reach,
+        tt: Math.round(reach + 165 - (this.state.stem - 100) * 0.3),
+        wb: Math.round(P.baseWb + (reach - P.baseReach) * 0.4),
+        ha: p ? P.haPerformance : P.haEndurance,
+        cl: W.clear
+      };
+    }
+
+    renderPlatformHeader() {
+      const P = this.platMeta;
+      $('#platBadge').innerHTML = `${ic('frame')}${P.name} / Demo ${P.code}`;
+      $('#dockPlatName').textContent = P.name;
+      $('#backToPlat').href = `Platforms.html#${P.id}`;
+      $$('#platSwitch .plat-btn').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.plat === P.id ? 'true' : 'false');
+      });
+      $$('#finishSwitch .fin-chip').forEach(b => {
+        b.setAttribute('aria-pressed', b.dataset.f === this.state.finish ? 'true' : 'false');
+      });
+    }
+
+    renderStepper() {
+      const st = $('#stepper');
+      $$('.step', st).forEach(e => e.remove());
+      const CHECK = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.4 2.4 4.6-5"/></svg>';
+      this.STEPS.forEach((s, i) => {
+        const n = i + 1;
+        const k = n < this.state.step ? 'done' : n === this.state.step ? 'cur' : 'up';
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'step ' + k;
+        b.setAttribute('role', 'tab');
+        b.setAttribute('aria-selected', k === 'cur');
+        b.innerHTML = `<span class="dot">${k === 'done' ? CHECK : s.n}</span><span><b>${k === 'done' && n === 1 ? '01 ' : ''}${s.t}</b><i>${n === 1 && k !== 'cur' ? s.s.done : s.s[k]}</i></span>`;
+        b.addEventListener('click', () => this.goStep(n));
+        st.appendChild(b);
+      });
+      $('#bar').style.width = (this.state.step / 4 * 100) + '%';
+      this.renderDock();
+    }
+
+    goStep(n) {
+      this.state.step = n;
+      this.renderStepper();
+      const tg = this.STEPS[n - 1].target;
+      if (tg === 'top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.toast(`Платформа: ${this.platMeta.name} (${this.finishMeta.name})`);
+      } else {
+        const el = $(tg);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (n === 4) {
+        const a = $('#auth');
+        a.classList.add('hl');
+        setTimeout(() => a.classList.remove('hl'), 1800);
+      }
+      this.saveState();
+    }
+
+    renderGeo() {
+      const g = this.geo();
+      const rows = [
+        ['Stack', g.stack, 'мм', 1],
+        ['Reach', g.reach, 'мм', 1],
+        ['Верхня труба', g.tt, 'мм'],
+        ['Колісна база', g.wb, 'мм'],
+        ['Кут рульової', g.ha, '°'],
+        ['Кліренс', g.cl, 'мм']
+      ];
+      $('#gBody').innerHTML = rows.map(([l, v, u, m]) => `<tr><td class="${m ? 'm' : ''}"><span class="gl">${ic(({'Stack':'ruler-v','Reach':'reach','Верхня труба':'tt','Колісна база':'wb','Кут рульової':'ang','Кліренс':'clr'})[l])}${l}</span></td><td class="v ${m ? 'b' : ''} ${this.prevG[l] !== undefined && this.prevG[l] !== v ? 'flash' : ''}">${v}</td><td class="u">${u}</td></tr>`).join('');
+      rows.forEach(r => this.prevG[r[0]] = r[1]);
+
+      const hx = 182 + (g.reach - 385) * 0.35;
+      const sy = 62 - (g.stack - 565) * 0.35;
+      $('#sch-line').setAttribute('d', `M54 130L92 ${sy.toFixed(1)}L114 130Z M92 ${sy.toFixed(1)}L${hx.toFixed(1)} ${(sy + 3).toFixed(1)}L${(hx + 6).toFixed(1)} ${(sy + 10).toFixed(1)}L114 130 M${(hx + 4).toFixed(1)} ${(sy + 8).toFixed(1)}L216 130`);
+      $('#ov-stack').textContent = 'STACK ' + g.stack;
+      $('#ov-reach').textContent = 'REACH ' + g.reach;
+      return g;
+    }
+
+    renderPrice() {
+      const F = this.OPT.frame[this.state.frame];
+      const T = this.OPT.trans[this.state.trans];
+      const W = this.OPT.wheels[this.state.wheels];
+      const items = [
+        [F.label, F.price, false, this.state.frame !== 'ti', 'frame'],
+        ['Fit Engineering', 450, true, false, 'sliders'],
+        ['Трансмісія', T.price, false, T.bad, 'gear'],
+        ['Колісна пара', W.price, false, this.state.wheels !== 'carbon', 'wheel'],
+        ['Кокпіт', 650, false, false, 'cockpit'],
+        ['Фініш (' + this.finishMeta.name + ')', 700, false, this.state.finish !== 'raw', 'spark'],
+        ['Збірка', 500, false, false, 'wrench']
+      ];
+      $('#lines').innerHTML = items.map(([l, v, mo, chg, ico]) => `<div class="${mo ? 'mo' : ''} ${chg ? 'chg' : ''}"><span>${ic(ico)}${l}</span><span>€ ${fmt(v)}</span></div>`).join('');
+      const total = items.reduce((a, i) => a + i[1], 0);
+      const el = $('#total'), from = this.state.total, t0 = performance.now();
+      cancelAnimationFrame(this.tweenId);
+      const step = (t) => {
+        const k = Math.min(1, (t - t0) / 350);
+        const e = 1 - Math.pow(1 - k, 3);
+        el.textContent = '€ ' + fmt(from + (total - from) * e);
+        if (k < 1) this.tweenId = requestAnimationFrame(step);
+      };
+      this.tweenId = requestAnimationFrame(step);
+      this.state.total = total;
+      $('#detList').innerHTML = `<li><b>Платформа</b> — ${this.platMeta.name} (${this.platMeta.code}).</li><li><b>Рама</b> — ${F.txt.toLowerCase()}.</li><li><b>Fit Engineering</b> — замір і підбір посадки (${this.state.fit === 'endurance' ? 'Endurance' : 'Performance'}).</li><li><b>Трансмісія</b> — ${T.txt.toLowerCase()}.</li><li><b>Колісна пара</b> — ${W.txt.toLowerCase()}.</li>`;
+    }
+
+    renderNodes() {
+      const XICO = '<svg width="9" height="9" viewBox="0 0 9 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1.5 1.5l6 6M7.5 1.5l-6 6"/></svg>';
+      $('#nodes').innerHTML = this.NODES.map(n => `<div class="card node"><p class="kicker">${ic(n.ico)}${n.title}</p><div class="radios" role="radiogroup" aria-label="${n.title}">${
+        Object.entries(this.OPT[n.k]).map(([id, o]) => {
+          const on = this.state[n.k] === id;
+          const OI = { ti: 'hex', cf: 'layers', elec: 'bolt', track: 'link', carbon: 'wheel', alu: 'rim' };
+          return `<button type="button" class="opt ${o.bad ? 'bad' : ''}" role="radio" aria-checked="${on}" data-k="${n.k}" data-v="${id}"><span class="rad">${o.bad && !on ? XICO : ''}</span><span class="oi">${ic(OI[id])}</span><span><b>${o.name}</b><small>${on ? o.sel : o.alt}</small></span></button>`;
+        }).join('')
+      }</div></div>`).join('');
+
+      $$('#nodes .opt').forEach(b => b.addEventListener('click', () => {
+        this.state[b.dataset.k] = b.dataset.v;
+        const chosenOpt = this.OPT[b.dataset.k][b.dataset.v];
+        if (chosenOpt && chosenOpt.bad) {
+          this.toast(`${chosenOpt.name} несумісна з платформою ${this.platMeta.name}`);
+        }
+        if (this.state.step < 3) {
+          this.state.step = 3;
+          this.renderStepper();
+        }
+        this.renderAll();
+        this.saveState();
+      }));
+    }
+
+    renderCompat() {
+      const ICO = {
+        ok: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#34C38F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7.3"/><path d="M5.8 9.2l2.2 2.2 4.2-4.4"/></svg>',
+        warn: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E3B341" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.4l7 12.2H2z"/><path d="M9 7.3v3.4M9 12.8v.1"/></svg>',
+        bad: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#E5646E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7.3"/><path d="M6.4 6.4l5.2 5.2M11.6 6.4l-5.2 5.2"/></svg>'
+      };
+      const W = this.OPT.wheels[this.state.wheels];
+      const T = this.OPT.trans[this.state.trans];
+      const okAll = Object.values(this.state.valid).every(Boolean);
+      const items = [
+        okAll ? ['ok', 'OK · посадка', 'Stack / Reach у межах демодіапазону.'] : ['warn', 'Warning · посадка', 'Є значення поза демодіапазоном.'],
+        ['ok', 'OK · кліренс (' + this.platMeta.name + ')', `Шина ${W.tire} мм у межах допуску (${W.clear} мм).`],
+        T.bad
+          ? ['bad', 'Incompatible · ' + T.name, `Несумісна з дропаутами ${this.platMeta.name}.`, true]
+          : ['ok', 'OK · трансмісія', `${T.name} повністю сумісна з ${this.platMeta.name}.`, false]
+      ];
+      $('#cl').innerHTML = items.map(([t, a, b, act]) => `<div class="ci ${act ? 'active' : ''}">${ICO[t]}<div><b>${a}</b><small>${b}</small></div></div>`).join('');
+    }
+
+    renderCaption() {
+      const CAPIDX = { 1: 'frame', 2: 'trans', 3: 'wheels' };
+      const k = CAPIDX[this.state.hs];
+      const o = this.OPT[k][this.state[k]];
+      $('#capT').textContent = o.cap[0];
+      $('#capS').textContent = o.cap[1];
+    }
+
+    renderAlt() {
+      const F = this.OPT.frame[this.state.frame];
+      const T = this.OPT.trans[this.state.trans];
+      const W = this.OPT.wheels[this.state.wheels];
+      $('#altTxt').textContent = `Платформа: ${this.platMeta.name}. 01 · ${F.txt}. 02 · ${T.txt}. 03 · ${W.txt}.`;
+    }
+
+    renderDock() {
+      const g = this.geo();
+      const F = this.OPT.frame[this.state.frame];
+      $('#dockInfo').textContent = `${F.mat} (${this.finishMeta.name}) · REACH ${g.reach} мм · STACK ${g.stack} мм · € ${fmt(this.state.total)} / демо`;
+      $('#dockBtn').textContent = this.state.step === 4 ? 'Обговорити збірку' : 'До фінішу й походження';
+    }
+
+    drawBike() {
+      const wh = $('#wheels'), W = this.state.wheels, aluminium = W === 'alu';
+      wh.innerHTML = '';
+      [101, 398].forEach(cx => {
+        const c = (r, sw, col, op = 1) => {
+          const e = document.createElementNS(NS, 'circle');
+          e.setAttribute('cx', cx);
+          e.setAttribute('cy', 157);
+          e.setAttribute('r', r);
+          e.setAttribute('stroke', col);
+          e.setAttribute('stroke-width', sw);
+          e.setAttribute('opacity', op);
+          wh.appendChild(e);
+        };
+        c(95, aluminium ? 9 : 13, aluminium ? '#3A5A47' : '#2A4635');
+        c(84, 1, '#3A5A47', 0.8);
+        for (let i = 0; i < 14; i++) {
+          const a = i / 14 * Math.PI * 2;
+          const l = document.createElementNS(NS, 'line');
+          l.setAttribute('x1', cx);
+          l.setAttribute('y1', 157);
+          l.setAttribute('x2', cx + Math.cos(a) * 84);
+          l.setAttribute('y2', 157 + Math.sin(a) * 84);
+          l.setAttribute('stroke', '#3A5A47');
+          l.setAttribute('stroke-width', 0.7);
+          l.setAttribute('opacity', 0.8);
+          wh.appendChild(l);
+        }
+        c(4, 2, '#6F8577');
+      });
+      const col = this.state.frame === 'ti' ? this.finishMeta.stroke : '#66746B';
+      const sw = this.state.frame === 'ti' ? 5 : 7;
+      $('#fr-main').setAttribute('stroke', col);
+      $('#fr-main').setAttribute('stroke-width', sw);
+      $('#fr-seat').setAttribute('stroke', col);
+      $('#fr-seat').setAttribute('stroke-width', 6);
+      $('#bb').setAttribute('stroke', this.OPT.trans[this.state.trans].bad ? '#7A3F44' : '#2A4635');
+    }
+
+    saveState() {
+      App.Storage.saveConfig(this.state);
+      const url = new URL(window.location.href);
+      url.searchParams.set('platform', this.state.platform);
+      url.searchParams.set('finish', this.state.finish);
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    initInputs() {
+      $$('.field[data-f]').forEach(f => {
+        const key = f.dataset.f;
+        const cfg = this.FIELDS[key];
+        const combo = $('.combo', f);
+        const inp = $('input', f);
+        const list = $('ul', f);
+        const hint = $('.hint', f);
+
+        inp.value = this.state[key];
+        list.innerHTML = cfg.presets.map(v => `<li role="option" data-v="${v}">${v}</li>`).join('');
+
+        const open = () => {
+          $$('.combo.open').forEach(c => c !== combo && close(c));
+          combo.classList.add('open');
+          list.hidden = false;
+          inp.setAttribute('aria-expanded', 'true');
+          $$('li', list).forEach(l => l.classList.toggle('sel', +l.dataset.v === this.state[key]));
+          const s = $('li.sel', list);
+          if (s) list.scrollTop = s.offsetTop - 80;
+        };
+
+        const close = (c) => {
+          const cc = c || combo;
+          cc.classList.remove('open');
+          $('ul', cc).hidden = true;
+          $('input', cc).setAttribute('aria-expanded', 'false');
+        };
+
+        const apply = (v) => {
+          const n = parseInt(v, 10);
+          const ok = Number.isFinite(n) && n >= cfg.min && n <= cfg.max;
+          this.state.valid[key] = ok;
+          combo.classList.toggle('bad', !ok);
+          hint.textContent = ok ? cfg.hint : `Допустимий діапазон: ${cfg.min}–${cfg.max} мм`;
+          if (ok) {
+            this.state[key] = n;
+            this.renderAll();
+            this.saveState();
+          } else {
+            this.renderCompat();
+          }
+        };
+
+        inp.addEventListener('input', () => {
+          inp.value = inp.value.replace(/\D/g, '');
+          apply(inp.value);
+        });
+        inp.addEventListener('focus', () => inp.select());
+        inp.addEventListener('blur', () => setTimeout(() => {
+          if (!this.state.valid[key]) {
+            inp.value = this.state[key];
+            this.state.valid[key] = true;
+            combo.classList.remove('bad');
+            hint.textContent = cfg.hint;
+            this.renderCompat();
+          }
+        }, 150));
+
+        inp.addEventListener('keydown', e => {
+          if (e.key === 'ArrowDown' && !combo.classList.contains('open')) {
+            e.preventDefault();
+            open();
+          } else if (e.key === 'Escape') {
+            close();
+          } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            const d = e.key === 'ArrowUp' ? 1 : -1;
+            const n = Math.min(cfg.max, Math.max(cfg.min, (parseInt(inp.value, 10) || this.state[key]) + d));
+            inp.value = n;
+            apply(n);
+          }
+        });
+
+        $('.combo-btn', f).addEventListener('click', () => combo.classList.contains('open') ? close() : (open(), inp.focus()));
+        list.addEventListener('mousedown', e => e.preventDefault());
+        list.addEventListener('click', e => {
+          const li = e.target.closest('li');
+          if (!li) return;
+          inp.value = li.dataset.v;
+          apply(li.dataset.v);
+          close();
+        });
+      });
+
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.combo')) {
+          $$('.combo.open').forEach(c => {
+            c.classList.remove('open');
+            $('ul', c).hidden = true;
+            $('input', c).setAttribute('aria-expanded', 'false');
+          });
+        }
+      });
+    }
+
+    initControls() {
+      // Перемикач платформ (Road / Gravel / Track)
+      $$('#platSwitch .plat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const nextPlat = btn.dataset.plat;
+          if (!App.PLATFORMS[nextPlat]) return;
+          this.state.platform = nextPlat;
+          this.state.trans = App.PLATFORMS[nextPlat].defaultTrans;
+          this.renderPlatformHeader();
+          this.renderStepper();
+          this.renderAll();
+          this.saveState();
+          this.toast(`Платформу змінено: ${this.platMeta.name}`);
+        });
+      });
+
+      // Перемикач фінішу рами (Raw / Stealth / Forest)
+      $$('#finishSwitch .fin-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const nextFin = btn.dataset.f;
+          if (!App.FINISHES[nextFin]) return;
+          this.state.finish = nextFin;
+          this.renderPlatformHeader();
+          this.renderStepper();
+          this.renderAll();
+          this.saveState();
+          this.toast(`Фініш рами: ${this.finishMeta.name}`);
+        });
+      });
+
+      // Hotspots
+      const setHs = (n) => {
+        this.state.hs = n;
+        $$('.hs').forEach(h => h.classList.toggle('on', +h.dataset.h === n));
+        this.renderCaption();
+      };
+      $$('.hs').forEach(h => {
+        h.addEventListener('click', () => setHs(+h.dataset.h));
+        h.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setHs(+h.dataset.h);
+          }
+        });
+      });
+
+      // Profile & tools
+      $('#profBtn').addEventListener('click', () => {
+        this.state.prof = this.state.prof === 1 ? 2 : 1;
+        $('#stage').classList.toggle('prof2', this.state.prof === 2);
+        $('#profBtn').textContent = 'Профіль · 0' + this.state.prof;
+      });
+
+      $('#tZoom').addEventListener('click', e => {
+        this.state.zoom = !this.state.zoom;
+        $('#stage').classList.toggle('zoom', this.state.zoom);
+        e.currentTarget.classList.toggle('on', this.state.zoom);
+        e.currentTarget.setAttribute('aria-pressed', this.state.zoom);
+      });
+
+      $('#tReset').addEventListener('click', () => {
+        this.state.zoom = false;
+        this.state.prof = 1;
+        $('#stage').classList.remove('zoom', 'prof2');
+        $('#tZoom').classList.remove('on');
+        $('#profBtn').textContent = 'Профіль · 01';
+        setHs(1);
+        this.toast('Вигляд скинуто');
+      });
+
+      $('#tFull').addEventListener('click', () => {
+        const v = $('#viewer');
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else if (v.requestFullscreen) {
+          v.requestFullscreen().catch(() => this.toast('Повноекранний режим недоступний'));
+        } else {
+          this.toast('Повноекранний режим недоступний');
+        }
+      });
+
+      // Fit type selector
+      $$('#fitType .opt').forEach(b => {
+        b.setAttribute('aria-checked', b.dataset.v === this.state.fit);
+        b.addEventListener('click', () => {
+          this.state.fit = b.dataset.v;
+          $$('#fitType .opt').forEach(o => {
+            const on = o === b;
+            o.setAttribute('aria-checked', on);
+            $('small', o).textContent = on ?
+              (o.dataset.v === 'endurance' ? 'Обрано · комфорт / дистанція' : 'Обрано · агресивніша посадка') :
+              (o.dataset.v === 'endurance' ? 'Альтернатива · комфорт / дистанція' : 'Альтернативний демопрофіль');
+          });
+          this.renderAll();
+          this.saveState();
+        });
+      });
+
+      // Details button
+      $('#detBtn').addEventListener('click', e => {
+        const p = $('#detPanel');
+        const o = p.classList.toggle('open');
+        e.currentTarget.setAttribute('aria-expanded', o);
+        e.currentTarget.textContent = o ? 'Сховати деталі ↑' : 'Деталі кошторису →';
+      });
+
+      // Save button
+      $('#save').addEventListener('click', e => {
+        const b = e.currentTarget;
+        b.textContent = 'Збережено ✓';
+        this.saveState();
+        this.toast('Конфігурацію збережено локально');
+        setTimeout(() => b.textContent = 'Зберегти конфігурацію →', 2200);
+      });
+
+      // Modal
+      const modal = $('#modal');
+      let lastFocus;
+
+      const summary = () => {
+        const g = this.geo();
+        return `${this.platMeta.name} · ${this.platMeta.code} · Фініш: ${this.finishMeta.name}\n${this.OPT.frame[this.state.frame].name} · ${this.OPT.trans[this.state.trans].name} · ${this.OPT.wheels[this.state.wheels].name}\nReach ${g.reach} мм · Stack ${g.stack} мм · € ${fmt(this.state.total)} / демо`;
+      };
+
+      const openModal = (title) => {
+        lastFocus = document.activeElement;
+        $('#mTitle').textContent = title || 'Обговорення збірки';
+        $('#mSum').innerText = summary();
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => $('input[name=name]', modal).focus(), 30);
+      };
+
+      const closeModal = () => {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocus) lastFocus.focus();
+      };
+
+      $$('[data-modal]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.modal)));
+      $('#mClose').addEventListener('click', closeModal);
+      modal.addEventListener('mousedown', e => { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+      $$('#mSeg button').forEach(b => b.addEventListener('click', () => {
+        this.state.seg = b.dataset.v;
+        $$('#mSeg button').forEach(x => x.setAttribute('aria-checked', x === b));
+      }));
+
+      // Валідація форми модалки через спільний CadenzaApp.Validator + запис у cadenza_leads
+      const form = $('#mForm');
+      const inputs = $$('input, textarea', form);
+
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          if (input.classList.contains('input-invalid')) App.Validator.validateModalInput(input);
+        });
+        input.addEventListener('blur', () => {
+          if (input.value.trim()) App.Validator.validateModalInput(input);
+        });
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        let allValid = true;
+        inputs.forEach(input => {
+          if (!App.Validator.validateModalInput(input)) {
+            allValid = false;
+          }
+        });
+
+        if (!allValid) {
+          this.toast('Перевірте правильність заповнених полів');
+          return;
+        }
+
+        const n = $('input[name=name]', modal).value.trim();
+        App.Storage.saveLead({
+          type: 'configurator_build',
+          platform: this.platMeta.name,
+          code: this.platMeta.code,
+          finish: this.finishMeta.name,
+          frame: this.OPT.frame[this.state.frame].name,
+          trans: this.OPT.trans[this.state.trans].name,
+          wheels: this.OPT.wheels[this.state.wheels].name,
+          total: this.state.total,
+          format: this.state.seg,
+          name: n,
+          email: $('input[name=email]', modal).value.trim(),
+          phone: $('input[name=phone]', modal).value.trim(),
+          note: $('textarea[name=note]', modal).value.trim()
+        });
+
+        closeModal();
+        form.reset();
+        inputs.forEach(inp => inp.classList.remove('input-invalid'));
+        this.toast(`Дякуємо, ${n}! Запит ${this.platMeta.code} (${this.state.seg}) збережено.`);
+      });
+
+      $('#dockBtn').addEventListener('click', () => {
+        if (this.state.step < 4) this.goStep(4);
+        else openModal('Обговорення збірки');
+      });
+    }
+
+    renderAll() {
+      this.drawBike();
+      this.renderNodes();
+      this.renderGeo();
+      this.renderPrice();
+      this.renderAlt();
+      this.renderCaption();
+      this.renderCompat();
+      this.renderDock();
+    }
+
+    init() {
+      this.renderPlatformHeader();
+      this.renderStepper();
+      this.initInputs();
+      this.initControls();
+      this.renderAll();
+      this.saveState();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    window.app = new BikeConfigurator();
+  });
+})(window, document);
+</script>
+
+</body>
+</html>
