@@ -459,11 +459,11 @@
         if (els.unitPrice) els.unitPrice.textContent = '—';
         if (els.discountBadge) {
           els.discountBadge.textContent = 'Помилка вхідних даних';
-          els.discountBadge.className = 'est-status-pill mono rounded-full border border-cf-error/50 bg-cf-error/10 px-3 py-1 text-xs text-cf-error';
+          
         }
         if (els.statusPill) {
-          els.statusPill.textContent = 'QA Guard · Виявлено некоректні дані';
-          els.statusPill.className = 'est-status-pill mono inline-flex items-center gap-1.5 rounded-full border border-cf-error/50 bg-cf-error/10 px-3 py-1 text-xs text-cf-error';
+          els.statusPill.textContent = 'QA Guard';
+          
         }
         if (els.btnToConfig) {
           els.btnToConfig.disabled = true;
@@ -489,7 +489,7 @@
         els.fitFrameSize.textContent = quote.fitInfo.sizeLabel;
       }
       if (els.fitGeometry) {
-        els.fitGeometry.textContent = quote.fitInfo.geometryLabel + (quote.fitInfo.surcharge > 0 ? ' · Кастомний баттинг (+$250)' : ' · Стандарт Gr9');
+        els.fitGeometry.textContent = quote.fitInfo.stack + ' / ' + quote.fitInfo.reach + ' мм' + (quote.fitInfo.surcharge > 0 ? ' (+$250)' : '');
       }
       if (els.estWeight) {
         els.estWeight.textContent = quote.estWeightKg + ' кг';
@@ -498,17 +498,17 @@
       if (els.discountBadge) {
         if (quote.discountRate > 0) {
           var pct = Math.round(quote.discountRate * 100);
-          els.discountBadge.textContent = 'Серійна знижка −' + pct + '% (−' + formatCurrencyUSD(quote.discountAmountUsd) + ')';
-          els.discountBadge.className = 'est-status-pill mono rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300';
+          els.discountBadge.textContent = '−' + pct + '% (−' + formatCurrencyUSD(quote.discountAmountUsd) + ')';
+          
         } else {
-          els.discountBadge.textContent = 'Індивідуальний тираж (знижка від 3 шт.)';
-          els.discountBadge.className = 'est-status-pill mono rounded-full border border-cf-line bg-cf-field px-3 py-1 text-xs text-cf-muted';
+          els.discountBadge.textContent = 'Стандарт (0%)';
+          
         }
       }
 
       if (els.statusPill) {
-        els.statusPill.textContent = 'Fit & Cost Validated · Ready';
-        els.statusPill.className = 'est-status-pill mono inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300';
+        els.statusPill.textContent = 'Ready';
+        
       }
 
       if (els.summaryBreak) {
@@ -602,7 +602,7 @@
         var results = runQASelfTest();
         if (els.statusPill) {
           els.statusPill.textContent = 'QA Self-Test: 10/10 PASS (див. Console F12)';
-          els.statusPill.className = 'est-status-pill is-ok';
+          
         }
         if (window.CadenzaApp && typeof window.CadenzaApp.toast === 'function') {
           window.CadenzaApp.toast('QA Self-Test виконано: ' + results.length + '/10 PASS (відкрийте Console F12)', 2600);
