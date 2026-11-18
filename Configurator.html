@@ -250,8 +250,7 @@ footer { margin-top: 96px; }
       <a href="index.html">Головна</a>
       <a href="pro_nas.html">Про нас</a>
       <a href="Platforms.html">Платформи</a>
-      <a href="index.html#estimator" class="hover:text-[#FAD4B0] transition">Калькулятор</a>
-                    <a href="Configurator.html" class="on" aria-current="page">Конфігуратор</a>
+      <a href="Configurator.html" class="on" aria-current="page">Конфігуратор</a>
       <a href="index.html#contact">Зворотний зв'язок</a>
     </nav>
     <a class="pill" href="index.html#booking">Зарезервувати сесію</a>
@@ -428,6 +427,207 @@ footer { margin-top: 96px; }
     </div>
   </div>
 </section>
+
+<section class="wrap est-sec rv" id="estimator" aria-labelledby="estimatorTitle">
+  <div class="est-head">
+    <div>
+      <p class="kicker">Лабораторна робота №11 · Інтерактивний віджет (Defensive Programming)</p>
+      <h2 id="estimatorTitle">Калькулятор кошторису партії та Fit-специфікації</h2>
+    </div>
+    <p class="est-sub">
+      Миттєвий розрахунок вартості індивідуального або командного тиражу в USD та UAH (за курсом 41.5 ₴/$), автоматичний підбір ростовки рами Ti-3Al-2.5V та захист від граничних значень (Edge Cases).
+    </p>
+  </div>
+
+  <div class="est-grid">
+    <!-- Ліва картка: Параметри конфігурації -->
+    <div class="est-card">
+      <div class="est-card-top">
+        <h3>Вхідні параметри збірки</h3>
+        <span class="kicker" style="color:var(--accent)">Vanilla JS · Real-Time</span>
+      </div>
+
+      <!-- Глобальне повідомлення Defensive Guard -->
+      <div id="error-widget-global" class="est-global-err" role="alert" aria-live="polite" hidden></div>
+
+      <!-- Рядок 1: Кількість шасі та Зріст райдера -->
+      <div class="est-row-2">
+        <div class="est-field">
+          <label for="bikes-count" class="est-label">1. Кількість екземплярів (1–15 шт.) *</label>
+          <input
+            type="number"
+            id="bikes-count"
+            min="1"
+            max="15"
+            step="1"
+            value="1"
+            required
+            class="est-input"
+            aria-describedby="error-bikes"
+          >
+          <span class="est-hint">Серійна знижка: 3–4 шт. (−5%) · 5–15 шт. (−8%)</span>
+          <p id="error-bikes" hidden></p>
+        </div>
+
+        <div class="est-field">
+          <label for="rider-height" class="est-label">2. Зріст райдера (145–215 см) *</label>
+          <input
+            type="number"
+            id="rider-height"
+            min="145"
+            max="215"
+            step="1"
+            value="178"
+            required
+            class="est-input"
+            aria-describedby="error-height"
+          >
+          <span class="est-hint">Нестандартний баттинг (&lt;158 або &gt;193 см): +$250</span>
+          <p id="error-height" hidden></p>
+        </div>
+      </div>
+
+      <!-- Рядок 2: Платформа та Трансмісія -->
+      <div class="est-row-2">
+        <div class="est-field">
+          <label for="platform-type" class="est-label">3. Базова титанова платформа</label>
+          <select id="platform-type" class="est-input">
+            <option value="road" selected>Road Stradale (Титан Gr9 · $6 000)</option>
+            <option value="gravel">Gravel Sterrato (Титан Gr9 · $6 400)</option>
+            <option value="track">Track Velodromo (Титан Gr9 · $5 400)</option>
+          </select>
+        </div>
+
+        <div class="est-field">
+          <label for="drivetrain-tier" class="est-label">4. Рівень трансмісії</label>
+          <select id="drivetrain-tier" class="est-input">
+            <option value="mech">Mechanical Precision (+$0)</option>
+            <option value="elec" selected>Electronic Wireless Di2 / AXS (+$1 400)</option>
+            <option value="ceramic">Bespoke CeramicSpeed + Ti Cranks (+$2 200)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Рядок 3: Профіль карбонових коліс -->
+      <div class="est-range-wrap">
+        <div class="est-range-head">
+          <label for="wheel-profile" class="est-label" style="margin-bottom:0">5. Висота профілю карбонових коліс (30–65 мм)</label>
+          <span id="wheel-profile-val" class="est-wheel-badge">45 мм</span>
+        </div>
+        <input
+          type="range"
+          id="wheel-profile"
+          min="30"
+          max="65"
+          step="5"
+          value="45"
+          class="est-range"
+        >
+        <div class="est-range-scale">
+          <span>30–40 мм: Climbing (+$0)</span>
+          <span>45–50 мм: All-Round (+$450)</span>
+          <span>55–65 мм: Aero (+$850)</span>
+        </div>
+      </div>
+
+      <!-- Рядок 4: Додаткові опції ательє -->
+      <div>
+        <span class="est-label">6. Інженерні опції та кастомізація</span>
+        <div class="est-opts-grid">
+          <label for="opt-fit" class="est-opt-item">
+            <input type="checkbox" id="opt-fit" checked>
+            <span>
+              <span class="est-opt-title">3D-біомеханіка Fit Engineering</span>
+              <span class="est-opt-price">+$350 / екз.</span>
+            </span>
+          </label>
+
+          <label for="opt-finish" class="est-opt-item">
+            <input type="checkbox" id="opt-finish">
+            <span>
+              <span class="est-opt-title">Кастомне анодування Stealth / Forest</span>
+              <span class="est-opt-price">+$500 / екз.</span>
+            </span>
+          </label>
+
+          <label for="opt-provenance" class="est-opt-item">
+            <input type="checkbox" id="opt-provenance" checked>
+            <span>
+              <span class="est-opt-title">Паспорт Provenance NFC + монограма</span>
+              <span class="est-opt-price">+$200 / екз.</span>
+            </span>
+          </label>
+
+          <label for="opt-case" class="est-opt-item">
+            <input type="checkbox" id="opt-case">
+            <span>
+              <span class="est-opt-title">Карбоновий авіакейс Flight Guard</span>
+              <span class="est-opt-price">+$650 / екз.</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Кнопки дій -->
+      <div class="est-actions">
+        <div class="est-actions-left">
+          <button type="button" id="widget-to-config" class="pill">
+            Застосувати до 3D-сцени ↑
+          </button>
+          <button type="button" id="widget-reset" class="ghost" style="height:40px;padding:0 18px;">
+            Скинути до еталону
+          </button>
+        </div>
+        <button type="button" id="widget-qa-btn" class="ghost" style="height:40px;padding:0 16px;font-family:var(--mono);font-size:11px;">
+          QA Self-Test (10 кейсів)
+        </button>
+      </div>
+    </div>
+
+    <!-- Права картка: Живе табло результатів -->
+    <div class="est-result-card">
+      <div class="est-card-top">
+        <div>
+          <p class="kicker">Підсумковий кошторис</p>
+          <h3>Специфікація замовлення</h3>
+        </div>
+        <span id="widget-status-pill" class="est-status-pill">Fit &amp; Cost Validated · Ready</span>
+      </div>
+
+      <div class="est-price-hero">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span class="kicker">Загальна сума</span>
+          <span id="discount-badge" class="est-status-pill">Індивідуальний тираж (знижка від 3 шт.)</span>
+        </div>
+        <div class="est-price-row">
+          <span id="total-price" class="est-total-usd">$8 400</span>
+          <span id="unit-price" class="est-unit-usd">$8 400 / екз.</span>
+        </div>
+        <p id="total-price-uah" class="est-total-uah">Еквівалент: 348 600 ₴ (курс НБУ/міжбанк 41.5 ₴/$)</p>
+      </div>
+
+      <div class="est-metrics-grid">
+        <div class="est-metric-card">
+          <p class="est-metric-lbl">Ростовка рами</p>
+          <p id="fit-frame-size" class="est-metric-val">54 (M · 173–180 см)</p>
+        </div>
+        <div class="est-metric-card">
+          <p class="est-metric-lbl">Геометрія Stack / Reach</p>
+          <p id="fit-geometry" class="est-metric-val">Stack 565 мм / Reach 385 мм</p>
+        </div>
+        <div class="est-metric-card">
+          <p class="est-metric-lbl">Орієнтовна маса</p>
+          <p id="est-weight" class="est-metric-val">6.90 кг</p>
+        </div>
+      </div>
+
+      <div class="est-breakdown-box">
+        <p id="widget-breakdown-text">Формула: [Road Stradale ($6 000) + трансмісія +$1 400 + колеса 45 мм (+$450) + додаткові опції +$550] × 1 шт.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -484,6 +684,7 @@ footer { margin-top: 96px; }
 </div>
 
 <script src="validation.js"></script>
+<script src="widget.js"></script>
 <script>
 /**
  * CADENZA Atelier — Інтерактивний конфігуратор (BikeConfigurator)
