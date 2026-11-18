@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CADENZA Atelier — Єдиний модуль валідації форм та збереження заявок (validation.js)
+   CADENZA Atelier — Єдиний модуль валідації форм, автопідстановки +380 та відправки заявок (validation.js)
    Обробляє:
    1. #feedbackForm — розширена форма зворотного зв'язку з модалкою #successModal
    2. #form — форма запису на приватну консультацію (#booking на index.html)
@@ -8,26 +8,137 @@
 (function (window, document) {
   'use strict';
 
-  /* ---------- 1. Спільні регулярні вирази та правила ---------- */
+  var PHONE_PREFIX = '+380';
+
+  /* ---------- 1. Спільні регулярні вирази та нормалізація телефону +380 ---------- */
   var PATTERNS = {
     name: /^[а-яА-ЯіІїЇєЄґҐa-zA-Z'’-\s]{2,50}$/,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
     phoneStrict: /^\+380\d{9}$/,
     phoneLocalHint: /^0\d{9}$/,
-    phoneFlexible: /^\+?[0-9\s\-()]{10,18}$/
+    phoneFlexible: /^\+380\d{9}$/
   };
 
   var MESSAGES = {
     username: "Введіть ім'я (щонайменше 2 літери).",
     email: 'Введіть коректну електронну адресу.',
-    phoneStrict: 'Формат: +380XXXXXXXXX (без пробілів, дужок і дефісів).',
-    phoneFlexible: 'Вкажіть номер у форматі +380... (від 10 цифр).',
+    phoneStrict: 'Введіть 9 цифр номера після +380 (наприклад: +380671234567).',
+    phoneFlexible: 'Введіть 9 цифр номера після +380 (наприклад: +380671234567).',
     message: 'Повідомлення має містити щонайменше 10 символів.',
     agreement: 'Потрібна згода з політикою конфіденційності.'
   };
 
+  /**
+   * Розумна нормалізація українського номера телефону до формату +380XXXXXXXXX.
+   * Дозволяє вводити номер без +380 (наприклад: 671234567 або 0671234567).
+   */
+  function normalizeUkPhone(rawVal) {
+    var str = String(rawVal || '').trim();
+    if (!str || str === '+' || str === '+3' || str === '+38' || str === '+380') {
+      return PHONE_PREFIX;
+    }
+
+    // Витягуємо лише цифри
+    var digits = str.replace(/\D/g, '');
+
+    if (!digits) {
+      return PHONE_PREFIX;
+    }
+
+    // Якщо починається з 380... (включно з випадком +380067..., коли після автопрефікса +380 ввели 067)
+    if (digits.indexOf('380') === 0) {
+      var afterPrefix = digits.slice(3);
+      // Якщо користувач за звичкою ввів 0 після +380 (наприклад +3800671234567), прибираємо зайвий 0
+      if (afterPrefix.indexOf('0') === 0 && afterPrefix.length >= 2) {
+        afterPrefix = afterPrefix.slice(1);
+      }
+      return PHONE_PREFIX + afterPrefix.slice(0, 9);
+    }
+
+    // Якщо користувач почав вводити з 0 (наприклад 0671234567)
+    if (digits.indexOf('0') === 0) {
+      return PHONE_PREFIX + digits.slice(1, 10);
+    }
+
+    // Якщо користувач почав вводити з 38 (наприклад 38067...)
+    if (digits.indexOf('38') === 0 && digits.length > 2) {
+      var rest = digits.slice(2);
+      if (rest.indexOf('0') === 0) rest = rest.slice(1);
+      return PHONE_PREFIX + rest.slice(0, 9);
+    }
+
+    // Якщо користувач одразу вводить 9 цифр оператора (наприклад 671234567)
+    return PHONE_PREFIX + digits.slice(0, 9);
+  }
+
+  function isBarePrefix(val) {
+    var trimmed = String(val || '').trim();
+    return !trimmed || trimmed === '+' || trimmed === '+3' || trimmed === '+38' || trimmed === '+380';
+  }
+
+  /**
+   * Підключає автоматичне підтягування +380 до будь-якого поля телефону на сайті
+   */
+  function attachPhoneAutoPrefix(input) {
+    if (!input || input.dataset.phonePrefixed === 'true') return;
+    input.dataset.phonePrefixed = 'true';
+
+    if (!input.value || !input.value.trim()) {
+      input.value = PHONE_PREFIX;
+    } else {
+      input.value = normalizeUkPhone(input.value);
+    }
+
+    input.addEventListener('focus', function () {
+      if (isBarePrefix(input.value)) {
+        input.value = PHONE_PREFIX;
+      }
+      setTimeout(function () {
+        try {
+          var len = input.value.length;
+          input.setSelectionRange(len, len);
+        } catch (e) {}
+      }, 0);
+    });
+
+    input.addEventListener('keydown', function (e) {
+      // Не дозволяємо стерти базовий префікс +380 клавішею Backspace, коли курсор стоїть одразу після +380
+      if ((e.key === 'Backspace' || e.key === 'Delete') && input.selectionStart <= 4 && input.selectionEnd <= 4) {
+        if (input.value === PHONE_PREFIX) {
+          e.preventDefault();
+        }
+      }
+    });
+
+    input.addEventListener('input', function () {
+      var normalized = normalizeUkPhone(input.value);
+      if (input.value !== normalized) {
+        input.value = normalized;
+        try {
+          var len = input.value.length;
+          input.setSelectionRange(len, len);
+        } catch (e) {}
+      }
+    });
+
+    input.addEventListener('paste', function (e) {
+      setTimeout(function () {
+        input.value = normalizeUkPhone(input.value);
+      }, 0);
+    });
+  }
+
+  function initAllPhoneInputs() {
+    var telInputs = document.querySelectorAll('input[type="tel"], input[name="phone"]');
+    telInputs.forEach(function (inp) {
+      attachPhoneAutoPrefix(inp);
+    });
+  }
+
   var Validator = {
     patterns: PATTERNS,
+    normalizePhone: normalizeUkPhone,
+    isBarePrefix: isBarePrefix,
     isNameValid: function (val) {
       return PATTERNS.name.test(String(val || '').trim());
     },
@@ -35,12 +146,13 @@
       return PATTERNS.email.test(String(val || '').trim());
     },
     isPhoneStrictValid: function (val) {
-      return PATTERNS.phoneStrict.test(String(val || '').trim());
+      var norm = normalizeUkPhone(val);
+      return PATTERNS.phoneStrict.test(norm);
     },
     isPhoneFlexibleValid: function (val, required) {
-      var trimmed = String(val || '').trim();
-      if (!trimmed) return !required;
-      return PATTERNS.phoneFlexible.test(trimmed);
+      if (isBarePrefix(val)) return !required;
+      var norm = normalizeUkPhone(val);
+      return PATTERNS.phoneStrict.test(norm);
     },
     validateModalInput: function (input) {
       if (!input) return true;
@@ -48,14 +160,19 @@
       var name = input.name;
       var isValid = true;
 
-      if (input.required && !val) {
+      if (name === 'phone') {
+        if (isBarePrefix(val)) {
+          isValid = !input.required;
+        } else {
+          input.value = normalizeUkPhone(val);
+          isValid = PATTERNS.phoneStrict.test(input.value);
+        }
+      } else if (input.required && !val) {
         isValid = false;
       } else if (name === 'name' && val) {
         isValid = this.isNameValid(val);
       } else if (name === 'email' && val) {
         isValid = this.isEmailValid(val);
-      } else if (name === 'phone' && val) {
-        isValid = this.isPhoneFlexibleValid(val, false);
       }
 
       input.classList.toggle('input-invalid', !isValid);
@@ -96,6 +213,10 @@
       agreement: document.getElementById('agreement')
     };
 
+    if (fields.phone) {
+      attachPhoneAutoPrefix(fields.phone);
+    }
+
     var touched = {};
     var isSubmitting = false;
     var lastFocus = null;
@@ -110,7 +231,12 @@
         message: MESSAGES.email
       },
       phone: {
-        check: function () { return Validator.isPhoneStrictValid(fields.phone.value); },
+        check: function () {
+          if (fields.phone && !isBarePrefix(fields.phone.value)) {
+            fields.phone.value = normalizeUkPhone(fields.phone.value);
+          }
+          return Validator.isPhoneStrictValid(fields.phone.value);
+        },
         message: MESSAGES.phoneStrict
       },
       message: {
@@ -174,8 +300,9 @@
     function updatePhoneHint() {
       if (!phoneHint || !fields.phone) return;
       var v = fields.phone.value.trim();
-      if (PATTERNS.phoneLocalHint.test(v)) {
-        phoneHint.textContent = 'Можливо, ви маєте на увазі формат: +380' + v.slice(1);
+      var digitsLeft = 13 - v.length;
+      if (v.indexOf('+380') === 0 && digitsLeft > 0 && digitsLeft < 9) {
+        phoneHint.textContent = 'Ще цифр для повного номера: ' + digitsLeft;
         phoneHint.hidden = false;
       } else {
         phoneHint.textContent = '';
@@ -201,6 +328,9 @@
       });
 
       input.addEventListener('blur', function () {
+        if (key === 'phone' && isBarePrefix(input.value) && !touched[key]) {
+          return;
+        }
         touched[key] = true;
         validateField(key);
       });
@@ -211,6 +341,9 @@
       Object.keys(RULES).forEach(function (key) {
         clearError(fields[key]);
       });
+      if (fields.phone) {
+        fields.phone.value = PHONE_PREFIX;
+      }
       updatePhoneHint();
     }
 
@@ -298,12 +431,14 @@
         return;
       }
 
+      var cleanPhone = normalizeUkPhone(fields.phone.value);
+
       if (window.CadenzaApp && window.CadenzaApp.Storage) {
         window.CadenzaApp.Storage.saveLead({
           type: 'feedback',
           name: fields.username.value.trim(),
           email: fields.email.value.trim(),
-          phone: fields.phone.value.trim(),
+          phone: cleanPhone,
           topic: fields.topic ? fields.topic.value : '',
           message: fields.message.value.trim()
         });
@@ -317,7 +452,6 @@
 
   /* ==========================================================================
      3. Валідація форми запису на приватну консультацію (#form на index.html)
-     (Виправлено баг подвійного обробника submit та зламаних селекторів placeholder)
      ========================================================================== */
   function initBookingForm() {
     var bookingForm = document.getElementById('form');
@@ -328,6 +462,10 @@
     var phoneInput = bookingForm.querySelector('input[name="phone"]');
     var radios = bookingForm.querySelectorAll('.radio');
     var selectedFormat = 'Студія';
+
+    if (phoneInput) {
+      attachPhoneAutoPrefix(phoneInput);
+    }
 
     radios.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -346,6 +484,7 @@
         }
       });
       inp.addEventListener('blur', function () {
+        if (inp.name === 'phone' && isBarePrefix(inp.value)) return;
         if (inp.value.trim()) Validator.validateModalInput(inp);
       });
     });
@@ -370,13 +509,14 @@
 
       var savedCfg = (window.CadenzaApp && window.CadenzaApp.Storage) ? window.CadenzaApp.Storage.getConfig() : {};
       var userName = nameInput.value.trim();
+      var finalPhone = (phoneInput && !isBarePrefix(phoneInput.value)) ? normalizeUkPhone(phoneInput.value) : 'Не вказано';
 
       if (window.CadenzaApp && window.CadenzaApp.Storage) {
         window.CadenzaApp.Storage.saveLead({
           type: 'booking',
           name: userName,
           email: emailInput.value.trim(),
-          phone: phoneInput ? phoneInput.value.trim() : '',
+          phone: finalPhone,
           format: selectedFormat,
           platform: savedCfg.platform || 'road',
           finish: savedCfg.finish || 'raw'
@@ -384,6 +524,7 @@
       }
 
       bookingForm.reset();
+      if (phoneInput) phoneInput.value = PHONE_PREFIX;
       [nameInput, emailInput, phoneInput].forEach(function (inp) {
         if (inp) {
           inp.classList.remove('input-invalid');
@@ -396,13 +537,25 @@
       selectedFormat = 'Студія';
 
       if (window.CadenzaApp) {
-        window.CadenzaApp.toast('Дякуємо, ' + userName + '! Сесію (' + selectedFormat + ') зарезервовано.');
+        window.CadenzaApp.toast('Дякуємо, ' + userName + '! Сесію (' + selectedFormat + ') зарезервовано та надіслано на пошту.');
       }
     });
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    initAllPhoneInputs();
     initFeedbackForm();
     initBookingForm();
+
+    // Після закриття/скидання модальної форми #mForm на Platforms / Configurator відновлюємо префікс +380
+    var mForm = document.getElementById('mForm');
+    if (mForm) {
+      mForm.addEventListener('reset', function () {
+        setTimeout(function () {
+          var tel = mForm.querySelector('input[name="phone"]');
+          if (tel) tel.value = PHONE_PREFIX;
+        }, 10);
+      });
+    }
   });
 })(window, document);

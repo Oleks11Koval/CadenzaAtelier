@@ -907,3 +907,348 @@ html.theme-anim *::after {
     transform: none;
   }
 }
+
+
+/* ==========================================================================
+   ЛР №10: Інтеграція динамічних медіакомпонентів (Swiper.js v11, Fancybox v5, Typed.js)
+   ========================================================================== */
+
+/* Typed.js — динамічний рядок у Hero-секції */
+.hero-typed {
+  margin-top: 16px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+
+.hero-typed::before {
+  content: "›";
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.typed-cursor {
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* Спільна шапка секцій Галереї та Відгуків */
+.media-sec {
+  margin-top: 120px;
+}
+
+.media-sec .sec-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.media-sec h2 {
+  font-size: 36px;
+  line-height: 43px;
+  margin-top: 6px;
+}
+
+.media-sec .sub-note {
+  font-size: 13.5px;
+  line-height: 21px;
+  color: var(--muted);
+  max-width: 520px;
+}
+
+/* Fancybox v5 — Модальна галерея робіт ательє (#gallery) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.gallery-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 11;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: transform var(--smooth), box-shadow var(--smooth), border-color var(--smooth);
+}
+
+.gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.45s ease;
+}
+
+.gallery-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 21, 17, 0) 42%, rgba(14, 21, 17, 0.86) 100%);
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(250, 212, 176, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.gallery-card:hover img {
+  transform: scale(1.07);
+  filter: brightness(1.05);
+}
+
+.gallery-meta {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.gallery-meta b {
+  display: block;
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #FFFFFF;
+}
+
+.gallery-meta span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FAD4B0;
+  margin-bottom: 3px;
+}
+
+.gallery-zoom-badge {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(14, 21, 17, 0.75);
+  border: 1px solid rgba(250, 212, 176, 0.35);
+  color: #FAD4B0;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.gallery-card:hover .gallery-zoom-badge {
+  transform: scale(1.1);
+  background: #FAD4B0;
+  color: #0E1511;
+}
+
+/* Swiper.js v11 — Інтерактивний слайдер відгуків (#reviews) */
+.reviews-swiper-wrap {
+  position: relative;
+  margin-top: 32px;
+}
+
+.reviews-swiper {
+  padding: 8px 4px 56px !important;
+  overflow: hidden;
+}
+
+/* Захист від FOUC (Flash of Unstyled Content) до ініціалізації Swiper */
+.reviews-swiper:not(.swiper-initialized) .swiper-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.reviews-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.review-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 270px;
+  transition: transform var(--smooth), border-color var(--smooth), box-shadow var(--smooth);
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(250, 212, 176, 0.42);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.review-stars {
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.review-serial {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.review-quote {
+  font-size: 13.5px;
+  line-height: 22px;
+  color: var(--text);
+  font-style: italic;
+  margin-bottom: 22px;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.review-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--accent);
+  flex: none;
+  background: var(--bg);
+}
+
+.review-author h3 {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--fg);
+}
+
+.review-author p {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Навігаційні стрілки та пагінація Swiper */
+.reviews-swiper .swiper-button-prev,
+.reviews-swiper .swiper-button-next {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  color: var(--accent) !important;
+  top: calc(50% - 20px);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.reviews-swiper .swiper-button-prev::after,
+.reviews-swiper .swiper-button-next::after {
+  font-size: 14px !important;
+  font-weight: 700;
+}
+
+.reviews-swiper .swiper-button-prev:hover,
+.reviews-swiper .swiper-button-next:hover {
+  background: var(--accent);
+  color: var(--bg) !important;
+  border-color: var(--accent);
+  transform: scale(1.06);
+}
+
+.reviews-swiper .swiper-pagination {
+  bottom: 10px !important;
+}
+
+.reviews-swiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: var(--muted);
+  opacity: 0.4;
+  transition: width 0.25s ease, opacity 0.25s ease, background 0.25s ease;
+}
+
+.reviews-swiper .swiper-pagination-bullet-active {
+  width: 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 1;
+}
+
+html[data-theme="light"] .review-card:hover,
+html[data-theme="light"] .gallery-card:hover {
+  box-shadow: 0 16px 36px rgba(60, 45, 25, 0.14);
+  border-color: rgba(138, 78, 34, 0.35);
+}
+
+@media (max-width: 1140px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .reviews-swiper:not(.swiper-initialized) .swiper-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .media-sec {
+    margin-top: 80px;
+  }
+  .media-sec h2 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  .reviews-swiper:not(.swiper-initialized) .swiper-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .reviews-swiper .swiper-button-prev,
+  .reviews-swiper .swiper-button-next {
+    display: none;
+  }
+}
