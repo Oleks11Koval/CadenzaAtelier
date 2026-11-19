@@ -134,6 +134,8 @@
 
     return {
       sizeLabel: sizeCode,
+      stack: stack,
+      reach: reach,
       geometryLabel: 'Stack ' + stack + ' мм / Reach ' + reach + ' мм',
       surcharge: isCustomTubing ? BUSINESS_RULES.CUSTOM_TUBING_SURCHARGE : 0
     };
@@ -364,7 +366,7 @@
 
   /* ---------- 6. Ініціалізація ізольованого екземпляра віджета ---------- */
   function initCadenzaEstimator(rootSelector) {
-    var rootEl = typeof rootSelector === 'string' ? document.querySelector(rootSelector) : rootSelector;
+    var rootEl = (typeof rootSelector === 'string' && document && typeof document.querySelector === 'function') ? document.querySelector(rootSelector) : (typeof rootSelector === 'string' ? null : rootSelector);
 
     // Guard на випадок відсутності DOM-контейнера на інших сторінках (Тест №10: захист від TypeError)
     if (!rootEl) {
@@ -722,7 +724,8 @@
       var res = calculateQuote(tc.input);
       var passed = res.ok === tc.expectOk &&
         (!tc.expectTotalUsd || res.totalPriceUsd === tc.expectTotalUsd) &&
-        (!tc.expectNormalizedCount || res.bikesCount === tc.expectNormalizedCount);
+        (!tc.expectNormalizedCount || res.bikesCount === tc.expectNormalizedCount) &&
+        (!res.ok || (Number.isFinite(res.fitInfo.stack) && Number.isFinite(res.fitInfo.reach)));
 
       return {
         '№': tc.id,

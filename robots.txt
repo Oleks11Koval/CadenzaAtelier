@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oleks11koval.github.io/CadenzaAtelier/sitemap.xml
