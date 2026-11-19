@@ -240,27 +240,40 @@ footer { margin-top: 96px; }
   .back { display: none; }
 }
 
-/* Мінімальний вбудований калькулятор партії (#estimator у лівій колонці) */
-.est-mini { padding: 24px 28px; }
-.est-mini h2 { font-size: 22px; line-height: 28px; font-weight: 400; margin-top: 12px; letter-spacing: -0.01em; }
-.est-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+/* Мінімальний вбудований калькулятор партії (#estimator у лівій колонці — єдина дизайн-система CADENZA) */
+.est-mini { padding: 28px; }
+.est-mini h2 { font-family: var(--serif); font-size: 24px; line-height: 32px; font-weight: 400; margin-top: 18px; letter-spacing: -0.01em; color: var(--fg); }
+.est-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
 .est-mini .field { margin-top: 0; }
-.est-mini .combo-input { padding: 0 12px; height: 38px; font-size: 13px; }
-.est-mini select.combo-input { cursor: pointer; appearance: auto; }
+.est-mini .field label,
+.est-mini .lbl { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.est-mini .est-range-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.est-mini .est-range-head label { margin-bottom: 0; }
+.est-mini .combo-input { width: 100%; height: 40px; background: var(--bg); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 12px; font-family: var(--mono); font-size: 13px; color: var(--fg); transition: border-color 0.2s, background-color 0.2s; }
+.est-mini .combo-input:hover,
+.est-mini .combo-input:focus { outline: none; border-color: var(--accent); }
+.est-mini select.combo-input { cursor: pointer; appearance: none; -webkit-appearance: none; padding-right: 30px; background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 12 12%27 fill=%27none%27 stroke=%27%238E9C91%27 stroke-width=%271.5%27 stroke-linecap=%27round%27%3E%3Cpath d=%27M3 4.5L6 7.5L9 4.5%27/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
 .est-mini .combo-input.border-cf-error { border-color: var(--bad) !important; background: var(--bad-bg); }
 .est-mini .combo-input.border-amber-400 { border-color: var(--warn) !important; }
-.est-mini-range { width: 100%; accent-color: var(--accent); cursor: pointer; margin-top: 4px; height: 4px; }
-.est-mini-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-.est-chip { display: flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font-size: 11.5px; color: var(--text); cursor: pointer; transition: border-color 0.2s; user-select: none; }
+.est-mini-range { width: 100%; accent-color: var(--accent); cursor: pointer; margin-top: 2px; height: 4px; }
+.est-mini-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+.est-chip { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--text); cursor: pointer; transition: border-color 0.2s, background-color 0.2s; user-select: none; text-transform: none; letter-spacing: 0; }
 .est-chip:hover { border-color: var(--accent); }
-.est-chip input { accent-color: var(--accent); width: 13px; height: 13px; margin: 0; flex: none; }
-.est-chip small { font-family: var(--mono); font-size: 10px; color: var(--accent); margin-left: auto; }
-.est-err-msg, .text-cf-error { font-family: var(--mono); font-size: 10.5px; color: var(--bad); margin-top: 4px; line-height: 1.35; }
-.text-amber-300 { font-family: var(--mono); font-size: 10.5px; color: var(--warn); margin-top: 4px; line-height: 1.35; }
-.est-global-alert { margin-top: 12px; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--bad); background: var(--bad-bg); color: var(--bad); font-family: var(--mono); font-size: 11px; line-height: 1.4; }
-.est-mini-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
-.est-mini-actions button { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
+.est-chip:has(input:checked) { border-color: var(--accent); background: rgba(250, 212, 176, 0.06); }
+.est-chip input { accent-color: var(--accent); width: 14px; height: 14px; margin: 0; flex: none; cursor: pointer; }
+.est-chip small { font-family: var(--mono); font-size: 10.5px; color: var(--accent); margin-left: auto; }
+.est-err-msg, .text-cf-error { font-family: var(--mono); font-size: 10.5px; color: var(--bad); margin-top: 5px; line-height: 1.35; }
+.text-amber-300 { font-family: var(--mono); font-size: 10.5px; color: var(--warn); margin-top: 5px; line-height: 1.35; }
+.est-global-alert { margin-top: 14px; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--bad); background: var(--bad-bg); color: var(--bad); font-family: var(--mono); font-size: 11px; line-height: 1.45; }
+.est-mini .lines { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); font-family: var(--sans); }
+.est-mini .lines div span:last-child { font-family: var(--mono); font-size: 12px; }
+.est-mini .sum { margin-top: 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+.est-mini .total { font-family: var(--serif); font-size: 36px; line-height: 40px; font-weight: 400; color: var(--fg); margin-top: 6px; letter-spacing: -0.01em; }
+.est-mini .disc { font-family: var(--sans); font-size: 11.5px; line-height: 17px; color: var(--muted); margin-top: 6px; }
+.est-mini-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.est-mini-actions button { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
 .est-mini-actions button:hover { color: var(--accent); }
+html[data-theme="light"] .est-chip:has(input:checked) { background: rgba(138, 78, 34, 0.06); }
 
 </style>
 <script src="theme.js" defer></script>
@@ -409,8 +422,8 @@ footer { margin-top: 96px; }
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <label for="wheel-profile" style="margin-bottom:0;">Профіль ободів</label>
+        <div class="est-range-head">
+          <label for="wheel-profile">Профіль ободів</label>
           <span id="wheel-profile-val" class="mono" style="font-size:11.5px;color:var(--accent);">45 мм</span>
         </div>
         <input type="range" id="wheel-profile" min="30" max="65" step="5" value="45" class="est-mini-range">
@@ -481,11 +494,6 @@ footer { margin-top: 96px; }
           <button class="tool" id="tFull" type="button" aria-label="На весь екран" title="На весь екран"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2 5.5V2h3.5M10.5 2H14v3.5M14 10.5V14h-3.5M5.5 14H2v-3.5"/></svg></button>
         </div>
       </div>
-    </div>
-
-    <div class="card alt rv">
-      <h4><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-eye"/></svg>Текстова альтернатива візуалізації</h4>
-      <p id="altTxt"></p>
     </div>
 
     <div class="card geo rv" id="geo">
@@ -612,8 +620,8 @@ footer { margin-top: 96px; }
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const App = window.CadenzaApp;
-  const fmt = n => App.formatNumber(n);
+  let App = window.CadenzaApp;
+  const fmt = n => (App || window.CadenzaApp).formatNumber(n);
   const NS = 'http://www.w3.org/2000/svg';
   const ic = n => `<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-${n}"/></svg>`;
 
@@ -936,10 +944,12 @@ footer { margin-top: 96px; }
     }
 
     renderAlt() {
+      const altEl = $('#altTxt');
+      if (!altEl) return;
       const F = this.OPT.frame[this.state.frame];
       const T = this.OPT.trans[this.state.trans];
       const W = this.OPT.wheels[this.state.wheels];
-      $('#altTxt').textContent = `Платформа: ${this.platMeta.name}. 01 · ${F.txt}. 02 · ${T.txt}. 03 · ${W.txt}.`;
+      altEl.textContent = `Платформа: ${this.platMeta.name}. 01 · ${F.txt}. 02 · ${T.txt}. 03 · ${W.txt}.`;
     }
 
     renderDock() {
@@ -1319,6 +1329,7 @@ footer { margin-top: 96px; }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    App = window.CadenzaApp;
     window.app = new BikeConfigurator();
   });
 })(window, document);
