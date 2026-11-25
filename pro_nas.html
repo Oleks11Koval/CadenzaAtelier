@@ -27,18 +27,18 @@
 /* ===== Специфічні стилі сторінки «Про нас» (pro_nas.html) ===== */
 .atelier { margin-top: 88px; }
 .atelier .col { width: min(760px, 100%); margin-inline: auto; }
-.atelier h1 { font-size: 40px; line-height: 46px; }
-.atelier p { font-size: 15px; line-height: 25px; color: var(--muted); margin-top: 20px; }
+.atelier h1 { font-size: var(--fs-h2); line-height: 46px; }
+.atelier p { font-size: var(--fs-md); line-height: 25px; color: var(--muted); margin-top: 20px; }
 .atelier h1 + p { margin-top: 32px; }
 
 /* Відео-секція */
 .ride { margin-top: 120px; }
 .ride .head { text-align: center; }
-.ride h2 { font-size: 36px; line-height: 43px; }
-.ride .head p { font-size: 15px; line-height: 24px; color: var(--muted); margin: 14px auto 0; max-width: 540px; }
+.ride h2 { font-size: var(--fs-h3); line-height: 43px; }
+.ride .head p { font-size: var(--fs-md); line-height: 24px; color: var(--muted); margin: 14px auto 0; max-width: 540px; }
 .vid { position: relative; margin-top: 32px; aspect-ratio: 16 / 9; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .vid video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--bg); }
-.vid .nofile { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--muted); font-size: 13px; line-height: 20px; text-align: center; padding: 24px; }
+.vid .nofile { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--muted); font-size: var(--fs-sm); line-height: 20px; text-align: center; padding: 24px; }
 .vid .nofile svg { width: 44px; height: 44px; color: var(--accent); }
 .vid.is-missing video { display: none; }
 .vid.is-missing .nofile { display: flex; }
@@ -46,26 +46,26 @@
 /* Картки механіків */
 .mechanics { margin-top: 120px; padding-bottom: 136px; }
 .mechanics .head { text-align: center; }
-.mechanics h2 { font-size: 36px; line-height: 43px; }
-.mechanics .head p { font-size: 15px; line-height: 24px; color: var(--muted); margin: 14px auto 0; max-width: 540px; }
+.mechanics h2 { font-size: var(--fs-h3); line-height: 43px; }
+.mechanics .head p { font-size: var(--fs-md); line-height: 24px; color: var(--muted); margin: 14px auto 0; max-width: 540px; }
 .mgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
 .mcard { padding: 20px; }
 .mcard .ph { height: 320px; border-radius: 6px; overflow: hidden; background: var(--bg); }
 .mcard .ph img { width: 100%; height: 100%; object-fit: cover; }
-.mcard .role { font-size: 12px; line-height: 18px; color: var(--muted); margin-top: 18px; font-family: var(--mono); }
-.mcard h3 { font-size: 28px; line-height: 34px; margin-top: 5px; }
-.mcard .desc { font-size: 13px; line-height: 21px; color: var(--muted); margin-top: 10px; }
-.mcard .lbl { font-size: 12px; line-height: 18px; color: var(--accent); margin-top: 19px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+.mcard .role { font-size: var(--fs-xs); line-height: 18px; color: var(--muted); margin-top: 18px; font-family: var(--mono); }
+.mcard h3 { font-size: var(--fs-h4); line-height: 34px; margin-top: 5px; }
+.mcard .desc { font-size: var(--fs-sm); line-height: 21px; color: var(--muted); margin-top: 10px; }
+.mcard .lbl { font-size: var(--fs-xs); line-height: 18px; color: var(--accent); margin-top: 19px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
 .mcard ul { list-style: none; margin-top: 7px; }
-.mcard li { font-size: 13px; line-height: 21px; color: var(--fg); }
-.mcard .stat { font-size: 12px; line-height: 18px; color: var(--subtle); margin-top: 18px; font-family: var(--mono); }
+.mcard li { font-size: var(--fs-sm); line-height: 21px; color: var(--fg); }
+.mcard .stat { font-size: var(--fs-xs); line-height: 18px; color: var(--subtle); margin-top: 18px; font-family: var(--mono); }
 
 @media (max-width: 1140px) {
   .mgrid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .atelier { margin-top: 56px; }
-  .atelier h1, .ride h2, .mechanics h2 { font-size: 30px; line-height: 36px; }
+  .atelier h1, .ride h2, .mechanics h2 { font-size: var(--fs-h3); line-height: 36px; }
   .ride, .mechanics { margin-top: 80px; }
   .mechanics { padding-bottom: 96px; }
 }

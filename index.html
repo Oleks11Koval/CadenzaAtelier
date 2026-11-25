@@ -66,50 +66,50 @@
 .hero { padding: 80px 0 91px; }
 .hero .wrap { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
 .hero-text { max-width: 500px; padding-bottom: 6px; }
-.hero .kicker { font-family: var(--sans); font-size: 13px; line-height: 18px; letter-spacing: 0.02em; text-transform: none; color: var(--muted); }
-.hero h1 { font-size: 56px; line-height: 57px; letter-spacing: -0.005em; margin-top: 15px; max-width: 500px; }
-.hero p { font-size: 15px; line-height: 24px; color: var(--muted); margin-top: 21px; max-width: 496px; }
+.hero .kicker { font-family: var(--sans); font-size: var(--fs-sm); line-height: 18px; letter-spacing: 0.02em; text-transform: none; color: var(--muted); }
+.hero h1 { font-size: var(--fs-h1); line-height: 57px; letter-spacing: -0.005em; margin-top: 15px; max-width: 500px; }
+.hero p { font-size: var(--fs-md); line-height: 24px; color: var(--muted); margin-top: 21px; max-width: 496px; }
 .hero .pill { margin-top: 33px; }
 .hero-img { flex: none; width: 508px; height: 551px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--card); }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Платформи (прев'ю-картки) */
 .platforms { margin-top: 111px; }
-.platforms h2 { font-size: 36px; line-height: 43px; }
-.platforms .sub-note { font-size: 13px; line-height: 20px; color: var(--muted); margin-top: 5px; }
+.platforms h2 { font-size: var(--fs-h3); line-height: 43px; }
+.platforms .sub-note { font-size: var(--fs-sm); line-height: 20px; color: var(--muted); margin-top: 5px; }
 .pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 30px; }
 .pcard { overflow: hidden; display: flex; flex-direction: column; }
 .pcard .ph { height: 233px; overflow: hidden; background: var(--bg); }
 .pcard .ph img { width: 100%; height: 100%; object-fit: cover; }
 .pcard .body { padding: 25px 24px 24px; display: flex; flex-direction: column; flex: 1; }
-.pcard h3 { font-size: 24px; line-height: 29px; }
-.pcard .meta { font-size: 12px; line-height: 18px; color: var(--subtle); margin-top: 4px; font-family: var(--mono); }
+.pcard h3 { font-size: var(--fs-h4); line-height: 29px; }
+.pcard .meta { font-size: var(--fs-xs); line-height: 18px; color: var(--subtle); margin-top: 4px; font-family: var(--mono); }
 .pcard .actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--line); }
-.pcard .more { display: inline-block; font-size: 13px; line-height: 18px; color: var(--fg); transition: color 0.2s; }
+.pcard .more { display: inline-block; font-size: var(--fs-sm); line-height: 18px; color: var(--fg); transition: color 0.2s; }
 .pcard .more:hover { color: var(--accent); }
-.pcard .cfg-link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.pcard .cfg-link { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .pcard .cfg-link:hover { text-decoration: underline; }
 
 /* Карта майстерні */
 .workshop { margin-top: 128px; }
 .workshop .head { text-align: center; }
-.workshop h2 { font-size: 36px; line-height: 43px; }
+.workshop h2 { font-size: var(--fs-h3); line-height: 43px; }
 .map { margin-top: 32px; height: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .map iframe { display: block; width: 100%; height: 100%; border: 0; filter: invert(92%) hue-rotate(180deg) grayscale(0.35) brightness(0.95) contrast(0.95); }
 
 /* Форма запису на приватну консультацію (#booking) */
 .booking { margin-top: 124px; padding-bottom: 96px; }
 .booking .head, #contact .head { text-align: center; margin-bottom: 28px; }
-.booking h2, #contact h2 { font-size: 38px; line-height: 46px; }
-.booking .head p, #contact .head p { font-size: 13.5px; line-height: 21px; color: var(--muted); margin: 8px auto 0; max-width: 480px; text-align: center; }
+.booking h2, #contact h2 { font-size: var(--fs-h2); line-height: 46px; }
+.booking .head p, #contact .head p { font-size: var(--fs-sm); line-height: 21px; color: var(--muted); margin: 8px auto 0; max-width: 480px; text-align: center; }
 .form { width: min(560px, 100%); margin: 31px auto 0; }
 .field { margin-bottom: 16px; }
-.field label { display: block; font-size: 13px; line-height: 18px; color: var(--text); margin-bottom: 6px; }
-.field input { display: block; width: 100%; height: 42px; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 0 14px; font-size: 13.5px; color: var(--fg); transition: border-color 0.2s; }
+.field label { display: block; font-size: var(--fs-sm); line-height: 18px; color: var(--text); margin-bottom: 6px; }
+.field input { display: block; width: 100%; height: 42px; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 0 14px; font-size: var(--fs-sm); color: var(--fg); transition: border-color 0.2s; }
 .field input::placeholder { color: var(--subtle); }
 .field input:focus { outline: none; border-color: var(--accent); }
 .radios { display: flex; gap: 24px; margin-top: 19px; }
-.radio { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; color: var(--muted); cursor: pointer; transition: color 0.2s; }
+.radio { display: flex; align-items: center; gap: 8px; font-size: var(--fs-sm); line-height: 18px; color: var(--muted); cursor: pointer; transition: color 0.2s; }
 .radio:hover { color: var(--fg); }
 .radio .dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--line-2); background: var(--bg); flex: none; display: grid; place-items: center; transition: all 0.2s; }
 .radio[aria-checked="true"] { color: var(--fg); }
@@ -126,9 +126,9 @@
 }
 @media (max-width: 640px) {
   .hero { padding: 48px 0 64px; }
-  .hero h1 { font-size: 40px; line-height: 44px; }
+  .hero h1 { font-size: var(--fs-h2); line-height: 44px; }
   .platforms, .workshop, .booking { margin-top: 80px; }
-  .platforms h2, .workshop h2, .booking h2, #contact h2 { font-size: 30px; line-height: 36px; }
+  .platforms h2, .workshop h2, .booking h2, #contact h2 { font-size: var(--fs-h3); line-height: 36px; }
   .map { height: 320px; }
 }
 </style>
