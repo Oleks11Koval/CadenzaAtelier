@@ -40,37 +40,49 @@
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
 
+  /* Єдина шкала шрифтів (один стандарт для всього сайту) */
+  --fs-xs: 12px;   /* підписи, мітки, моно-текст */
+  --fs-sm: 14px;   /* інтерфейс, кнопки, поля, дрібний текст */
+  --fs-md: 16px;   /* основний текст */
+  --fs-h4: 24px;   /* заголовки карток */
+  --fs-h3: 32px;   /* заголовки секцій */
+  --fs-h2: 40px;   /* великі заголовки */
+  --fs-h1: 56px;   /* головний заголовок */
+
   /* Анімаційні криві */
   --smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   --spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ---------- Світла тема ---------- */
+/* ---------- Світла тема (бронза + темно-зелена гама темної теми) ---------- */
 html[data-theme="light"] {
   color-scheme: light;
-  --bg: #F4EFE7;
-  --card: #FBF8F2;
-  --card-deep: #EDE6DA;
-  --line: #DDD4C6;
-  --line-soft: #DDD4C6;
-  --line-2: #CDC3B2;
-  --accent: #8A4E22;
-  --accent-h: #743F18;
-  --muted: #5B685E;
-  --subtle: #566159; /* WCAG AA >= 5.8:1 on #FBF8F2 */
-  --text: #1B261E;
-  --fg: #16211A;
+  --bg: #D8C6A8;
+  --card: #E4D5BC;
+  --card-deep: #CBB791;
+  --forest: #1F3A28;
+  --sage: #4A5B48;
+  --line: #B8A482;
+  --line-soft: #BFAB8A;
+  --line-2: #A89268;
+  --accent: #1F3A28;
+  --accent-h: #142A1D;
+  --muted: #3E5043;
+  --subtle: #3B4D40; /* WCAG AA >= 5:1 on #D8C6A8 */
+  --text: #14241A;
+  --fg: #0E1511;
 
-  --bad: #C93B48;
-  --bad-bg: #FBEAEB;
-  --bad-bg-active: #F7D9DC;
+  --ok: #1F6B4A;
+  --bad: #A3303B;
+  --bad-bg: #EBD3CC;
+  --bad-bg-active: #E4C3BC;
 
-  --cf-field: #FBF8F2;
-  --cf-line: #8C8373;
-  --cf-text: #16211A;
-  --cf-muted: #5B685E;
-  --cf-accent: #8A4E22;
-  --cf-error: #B91C1C;
+  --cf-field: #E4D5BC;
+  --cf-line: #8A7653;
+  --cf-text: #0E1511;
+  --cf-muted: #3E5043;
+  --cf-accent: #1F3A28;
+  --cf-error: #A32626;
 }
 
 /* ---------- Базовий Reset ---------- */
@@ -82,12 +94,23 @@ html[data-theme="light"] {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 108px; /* висота шапки 84px + запас, щоб заголовок секції не обрізався */
+}
+
+[id] {
+  scroll-margin-top: 108px;
+}
+
+@media (max-width: 640px) {
+  html { scroll-padding-top: 92px; }
+  [id] { scroll-margin-top: 92px; }
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--sans);
+  font-size: var(--fs-md);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -131,7 +154,7 @@ h1, h2, h3 {
 
 .kicker {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
@@ -228,7 +251,7 @@ html[data-theme="light"] .logo img.logo-light {
   display: flex;
   align-items: center;
   gap: 34px;
-  font-size: 15px;
+  font-size: var(--fs-md);
   color: var(--muted);
 }
 
@@ -287,7 +310,7 @@ html[data-theme="light"] .logo img.logo-light {
   background: var(--accent);
   color: var(--bg);
   font-weight: 500;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   height: 40px;
   padding: 0 24px;
   white-space: nowrap;
@@ -310,7 +333,7 @@ html[data-theme="light"] .logo img.logo-light {
 .pill.lg {
   height: 45px;
   padding: 0 28px;
-  font-size: 14px;
+  font-size: var(--fs-sm);
 }
 
 .ghost {
@@ -319,7 +342,7 @@ html[data-theme="light"] .logo img.logo-light {
   justify-content: center;
   border: 1px solid var(--line-2);
   border-radius: 999px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   height: 45px;
   padding: 0 26px;
   color: var(--fg);
@@ -369,20 +392,20 @@ html[data-theme="light"] .logo img.logo-light {
 .pillar .n {
   display: block;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   line-height: 16px;
   letter-spacing: 0.16em;
   color: var(--muted);
 }
 
 .pillar h3 {
-  font-size: 25px;
+  font-size: var(--fs-h4);
   line-height: 30px;
   margin-top: 20px;
 }
 
 .pillar p {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 21.5px;
   color: var(--muted);
   margin-top: 11px;
@@ -404,7 +427,7 @@ footer {
 .foot h4,
 .foot h5 {
   font-family: var(--sans);
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   line-height: 18px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -416,7 +439,7 @@ footer {
 .foot p,
 .foot a {
   display: block;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 22px;
   color: var(--muted);
   transition: color 0.2s;
@@ -439,7 +462,7 @@ footer {
   background: #1B2A20;
   border: 1px solid var(--line-2);
   color: #FFFFFF;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   padding: 11px 20px;
   border-radius: 999px;
   opacity: 0;
@@ -460,9 +483,9 @@ footer {
 }
 
 html[data-theme="light"] .toast {
-  background: #16211A;
+  background: #0E1511;
   color: #FBF8F2;
-  border-color: #8A4E22;
+  border-color: #1F3A28;
 }
 
 /* ---------- Уніфіковане модальне вікно (.modal, .mc) ---------- */
@@ -500,7 +523,7 @@ html[data-theme="light"] .toast {
 
 .mc h3 {
   font-family: var(--serif);
-  font-size: 34px;
+  font-size: var(--fs-h3);
   font-weight: 400;
   margin: 10px 0 8px;
 }
@@ -511,7 +534,7 @@ html[data-theme="light"] .toast {
   top: 12px;
   width: 34px;
   height: 34px;
-  font-size: 22px;
+  font-size: var(--fs-h4);
   color: var(--muted);
   border-radius: 50%;
   display: grid;
@@ -524,7 +547,7 @@ html[data-theme="light"] .toast {
 
 .sumline {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-xs);
   line-height: 18px;
   color: var(--muted);
   border: 1px solid var(--line);
@@ -542,7 +565,7 @@ html[data-theme="light"] .toast {
 
 .mc label.f {
   display: block;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--text);
 }
 
@@ -555,7 +578,7 @@ html[data-theme="light"] .toast {
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--fg);
   transition: border-color 0.2s;
 }
@@ -585,7 +608,7 @@ html[data-theme="light"] .toast {
 .field-err {
   display: none;
   color: var(--bad);
-  font-size: 11.5px;
+  font-size: var(--fs-xs);
   line-height: 16px;
   margin-top: 5px;
 }
@@ -605,7 +628,7 @@ html[data-theme="light"] .toast {
   height: 38px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   color: var(--muted);
   transition: all 0.2s;
 }
@@ -616,49 +639,46 @@ html[data-theme="light"] .toast {
   background: var(--bg);
 }
 
-/* ---------- Кнопка перемикання теми (.theme-toggle) ---------- */
+/* ---------- Кнопка перемикання теми (.theme-toggle) — у шапці, ліворуч від CTA ---------- */
 .theme-toggle {
-  position: fixed;
-  left: 24px;
-  bottom: 24px;
-  z-index: 70;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  flex: none;
+  width: 40px;
   height: 40px;
-  padding: 0 18px 0 14px;
   border-radius: 999px;
   border: 1px solid var(--line-2);
   background: var(--card);
   color: var(--text);
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
   cursor: pointer;
-  white-space: nowrap;
   transition: transform var(--spring), border-color 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .theme-toggle:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--accent);
   color: var(--accent);
-  box-shadow: 0 10px 25px rgba(250, 212, 176, 0.18);
 }
 
 .theme-toggle:active {
-  transform: scale(0.96);
+  transform: scale(0.94);
 }
 
 .theme-toggle svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   flex: none;
 }
 
-.theme-toggle.above-dock {
-  bottom: 108px;
+.theme-toggle span {
+  /* текст лишається для скрінрідерів і підказки, візуально — лише іконка */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 /* ---------- Анімації та мікроінтеракції (Premium UI) ---------- */
@@ -728,7 +748,7 @@ html[data-theme="light"] .lines div span:last-child,
 html[data-theme="light"] .det:hover,
 html[data-theme="light"] .dock .t1,
 html[data-theme="light"] .back {
-  color: #16211A;
+  color: #0E1511;
 }
 
 html[data-theme="light"] .field label,
@@ -739,58 +759,58 @@ html[data-theme="light"] .tbl td,
 html[data-theme="light"] .lines div,
 html[data-theme="light"] .det-panel li b,
 html[data-theme="light"] .feats li {
-  color: #2B382E;
+  color: #14241A;
 }
 
 html[data-theme="light"] .field > label,
 html[data-theme="light"] .finish .lbl,
 html[data-theme="light"] :not(.mcard) > .lbl,
 html[data-theme="light"] .alt p {
-  color: #5B685E;
+  color: #3E5043;
 }
 
 html[data-theme="light"] .alt h4,
 html[data-theme="light"] .pcard .more:hover,
 html[data-theme="light"] .ghost:hover {
-  color: #8A4E22;
+  color: #1F3A28;
 }
 
 html[data-theme="light"] .ok-note {
-  color: #1F7A58;
+  color: #1F6B4A;
 }
 
 html[data-theme="light"] .sub {
-  background: rgba(244, 239, 231, 0.94);
+  background: rgba(216, 198, 168, 0.94);
 }
 
 html[data-theme="light"] .dock {
-  background: rgba(244, 239, 231, 0.96);
+  background: rgba(216, 198, 168, 0.96);
 }
 
 html[data-theme="light"] .combo-list {
-  background: #FBF8F2;
+  background: #E4D5BC;
 }
 
 html[data-theme="light"] .v-stage {
-  background: radial-gradient(ellipse at 50% 48%, #E5DEC9 0%, #DDD4C2 55%, #D2C7B4 100%);
+  background: radial-gradient(ellipse at 50% 48%, #E4D5BC 0%, #D8C6A8 55%, #C9B48F 100%);
 }
 
 html[data-theme="light"] .auth .ic {
-  background: #E5DEC9;
-  color: #8A4E22;
+  background: #CBB791;
+  color: #1F3A28;
 }
 
 html[data-theme="light"] .card:hover,
 html[data-theme="light"] .pcard:hover,
 html[data-theme="light"] .pillar:hover,
 html[data-theme="light"] .mcard:hover {
-  box-shadow: 0 16px 40px rgba(60, 45, 25, 0.14), 0 0 0 1px rgba(138, 78, 34, 0.18);
+  box-shadow: 0 16px 40px rgba(40, 30, 15, 0.16), 0 0 0 1px rgba(31, 58, 40, 0.22);
 }
 
 html[data-theme="light"] .hero-img:hover,
 html[data-theme="light"] .pcard:hover .ph,
 html[data-theme="light"] .mat:hover .ph {
-  box-shadow: 0 20px 40px rgba(60, 45, 25, 0.2);
+  box-shadow: 0 20px 40px rgba(40, 30, 15, 0.22);
 }
 
 html[data-theme="light"] .map iframe {
@@ -833,7 +853,7 @@ html.theme-anim *::after {
     width: 100%;
     padding: 12px 0;
     border-bottom: 1px solid var(--line);
-    font-size: 16px;
+    font-size: var(--fs-md);
   }
 
   .nav a:last-child {
@@ -877,8 +897,8 @@ html.theme-anim *::after {
   }
 
   .hdr .pill {
-    padding: 0 14px;
-    font-size: 12px;
+    padding: 0 12px;
+    font-size: var(--fs-xs);
     height: 36px;
   }
 
@@ -887,13 +907,12 @@ html.theme-anim *::after {
   }
 
   .theme-toggle {
-    left: 14px;
-    bottom: 14px;
-    padding: 0 14px 0 12px;
+    width: 36px;
+    height: 36px;
   }
 
-  .theme-toggle.above-dock {
-    bottom: 100px;
+  .hdr-actions {
+    gap: 8px;
   }
 }
 
@@ -921,7 +940,7 @@ html.theme-anim *::after {
   align-items: center;
   gap: 8px;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 20px;
   color: var(--accent);
   letter-spacing: 0.03em;
@@ -952,13 +971,13 @@ html.theme-anim *::after {
 }
 
 .media-sec h2 {
-  font-size: 36px;
+  font-size: var(--fs-h3);
   line-height: 43px;
   margin-top: 6px;
 }
 
 .media-sec .sub-note {
-  font-size: 13.5px;
+  font-size: var(--fs-sm);
   line-height: 21px;
   color: var(--muted);
   max-width: 520px;
@@ -1027,7 +1046,7 @@ html.theme-anim *::after {
 .gallery-meta b {
   display: block;
   font-family: var(--serif);
-  font-size: 21px;
+  font-size: var(--fs-h4);
   font-weight: 500;
   line-height: 1.15;
   color: #FFFFFF;
@@ -1036,7 +1055,7 @@ html.theme-anim *::after {
 .gallery-meta span {
   display: block;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #FAD4B0;
@@ -1115,13 +1134,13 @@ html.theme-anim *::after {
 
 .review-stars {
   color: var(--accent);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   letter-spacing: 2px;
 }
 
 .review-serial {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.1em;
   color: var(--muted);
   padding: 3px 9px;
@@ -1131,7 +1150,7 @@ html.theme-anim *::after {
 }
 
 .review-quote {
-  font-size: 13.5px;
+  font-size: var(--fs-sm);
   line-height: 22px;
   color: var(--text);
   font-style: italic;
@@ -1158,7 +1177,7 @@ html.theme-anim *::after {
 
 .review-author h3 {
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   line-height: 18px;
   color: var(--fg);
@@ -1166,7 +1185,7 @@ html.theme-anim *::after {
 
 .review-author p {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-xs);
   line-height: 16px;
   color: var(--muted);
   margin-top: 2px;
@@ -1187,7 +1206,7 @@ html.theme-anim *::after {
 
 .reviews-swiper .swiper-button-prev::after,
 .reviews-swiper .swiper-button-next::after {
-  font-size: 14px !important;
+  font-size: var(--fs-sm) !important;
   font-weight: 700;
 }
 
@@ -1220,8 +1239,8 @@ html.theme-anim *::after {
 
 html[data-theme="light"] .review-card:hover,
 html[data-theme="light"] .gallery-card:hover {
-  box-shadow: 0 16px 36px rgba(60, 45, 25, 0.14);
-  border-color: rgba(138, 78, 34, 0.35);
+  box-shadow: 0 16px 36px rgba(40, 30, 15, 0.16);
+  border-color: rgba(31, 58, 40, 0.4);
 }
 
 @media (max-width: 1140px) {
@@ -1238,7 +1257,7 @@ html[data-theme="light"] .gallery-card:hover {
     margin-top: 80px;
   }
   .media-sec h2 {
-    font-size: 30px;
+    font-size: var(--fs-h3);
     line-height: 36px;
   }
   .gallery-grid {
@@ -1267,7 +1286,7 @@ html[data-theme="light"] .gallery-card:hover {
   background: var(--accent);
   color: var(--bg);
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   text-decoration: none;
   transition: top 0.2s ease;
@@ -1289,4 +1308,46 @@ html[data-theme="light"] .gallery-card:hover {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+
+/* ---------- Світла тема: кнопки та акценти в зеленій гамі ---------- */
+html[data-theme="light"] .pill {
+  color: #F1E7D3;
+}
+
+html[data-theme="light"] .pill:hover {
+  box-shadow: 0 10px 25px rgba(31, 58, 40, 0.28);
+}
+
+html[data-theme="light"] .ghost:hover {
+  background: rgba(31, 58, 40, 0.07);
+  box-shadow: 0 10px 25px rgba(31, 58, 40, 0.14);
+}
+
+html[data-theme="light"] .skip-link {
+  color: #F1E7D3;
+}
+
+html[data-theme="light"] .gallery-zoom-badge:hover,
+html[data-theme="light"] .gallery-card:hover .gallery-zoom-badge {
+  background: #1F3A28;
+  color: #F1E7D3;
+}
+
+
+/* Вузькі екрани: шапка не виходить за межі в'юпорта (лого-іконка + тема + CTA + бургер) */
+@media (max-width: 480px) {
+  .hdr > .wrap,
+  .hdr > .wrap-wide {
+    gap: 10px;
+  }
+
+  .hdr .logo .logo-text {
+    display: none;
+  }
+
+  .hdr .pill {
+    padding: 0 12px;
+  }
 }

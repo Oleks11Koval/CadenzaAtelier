@@ -6,7 +6,6 @@
 (function (window, document) {
   'use strict';
 
-  var THEME_KEY = 'cadenza_theme';
   var CONFIG_KEY = 'cadenza_config_state';
   var LEADS_KEY = 'cadenza_leads';
   var root = document.documentElement;
@@ -201,11 +200,6 @@
     });
   }
 
-  /* ---------- 3. Миттєве застосування теми у <head> (без FOUC) ---------- */
-  if (Storage.getRaw(THEME_KEY) === 'light') {
-    root.setAttribute('data-theme', 'light');
-  }
-
   /* ---------- 4. Глобальний сервіс Toast-повідомлень ---------- */
   var toastTimer = null;
   function showToast(message, duration) {
@@ -234,8 +228,19 @@
     if (document.querySelector('.theme-toggle')) return;
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'theme-toggle' + (document.querySelector('.dock') ? ' above-dock' : '');
-    document.body.appendChild(btn);
+    btn.className = 'theme-toggle';
+    btn.title = 'Змінити тему';
+
+    // Розміщуємо кнопку в шапці — одразу ліворуч від кнопки «Зарезервувати сесію»
+    var pill = document.querySelector('.hdr .pill');
+    var hdrWrap = document.querySelector('.hdr > .wrap, .hdr > .wrap-wide');
+    if (pill && pill.parentNode) {
+      pill.parentNode.insertBefore(btn, pill);
+    } else if (hdrWrap) {
+      hdrWrap.appendChild(btn);
+    } else {
+      document.body.appendChild(btn);
+    }
 
     function render() {
       var isLight = root.getAttribute('data-theme') === 'light';
@@ -247,17 +252,11 @@
     btn.addEventListener('click', function () {
       var isLight = root.getAttribute('data-theme') === 'light';
       root.classList.add('theme-anim');
-      if (isLight) {
-        root.removeAttribute('data-theme');
-        Storage.setRaw(THEME_KEY, 'dark');
-      } else {
-        root.setAttribute('data-theme', 'light');
-        Storage.setRaw(THEME_KEY, 'light');
-      }
-      render();
+      window.CadenzaTheme.select(isLight ? 'dark' : 'light');
       setTimeout(function () { root.classList.remove('theme-anim'); }, 450);
     });
 
+    document.addEventListener('cadenza-theme-change', render);
     render();
   }
 
@@ -345,6 +344,54 @@
     elements.forEach(function (el) { observer.observe(el); });
   }
 
+  /* ---------- 7.1. Коректний скрол до якоря після завантаження (#booking, #contact) ---------- */
+  // Після переходу з іншої сторінки (index.html#booking) макет ще «з'їжджає» через
+  // підвантаження зображень та анімацію .rv, тому повторно вирівнюємо позицію з відступом під шапку.
+  function initAnchorScroll() {
+    // Вимикаємо анімацію появи для цільової секції, щоб її позиція виміряна без translateY
+    function reveal(el) {
+      el.style.transition = 'none';
+      el.classList.add('in');
+      void el.offsetHeight;
+      requestAnimationFrame(function () { el.style.transition = ''; });
+    }
+    function target() {
+      if (!location.hash || location.hash.length < 2) return null;
+      try { return document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) { return null; }
+    }
+    function align() {
+      var el = target();
+      if (!el) return;
+      reveal(el);
+      var hdr = document.querySelector('.hdr');
+      var offset = (hdr ? hdr.offsetHeight : 84) + 24;
+      var top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+    }
+    if (target()) {
+      window.addEventListener('load', function () {
+        align();
+        setTimeout(align, 350);
+      });
+    }
+    // Клік по якірному посиланню на цій самій сторінці (кнопка «Зарезервувати сесію»)
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="#"]');
+      if (!a) return;
+      var url;
+      try { url = new URL(a.getAttribute('href'), location.href); } catch (err) { return; }
+      if (url.pathname !== location.pathname || !url.hash || url.hash.length < 2) return;
+      var el = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+      if (!el) return;
+      e.preventDefault();
+      history.pushState(null, '', url.hash);
+      reveal(el);
+      var hdr = document.querySelector('.hdr');
+      var offset = (hdr ? hdr.offsetHeight : 84) + 24;
+      window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - offset), behavior: 'smooth' });
+    });
+  }
+
   /* ---------- 8. Експорт у глобальний простір імен CadenzaApp ---------- */
   window.CadenzaApp = {
     PLATFORMS: PLATFORMS,
@@ -359,8 +406,9 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initFaviconAndLogos();
-    initThemeToggle();
-    initNavigation();
+    initNavigation();   // спершу створює контейнер .hdr-actions
+    initThemeToggle();  // потім кнопка теми стає ліворуч від CTA
     initScrollReveal();
+    initAnchorScroll();
   });
 })(window, document);
